@@ -23,3 +23,10 @@ exports.login = {
     reply.view('login', { title: 'Login to MyTweet' });
   },
 };
+
+exports.authenticate = {
+  auth: false,
+  handler: function (request, reply) {
+    reply.view('home', { title: 'MyTweet Timeline' });
+  },
+};
