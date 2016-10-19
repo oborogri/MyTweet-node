@@ -3,6 +3,8 @@
  */
 'use strict';
 
+const User = require('../models/user');
+
 exports.main = {
   auth: false,
   handler: function (request, reply) {
@@ -27,12 +29,27 @@ exports.login = {
 exports.authenticate = {
   auth: false,
   handler: function (request, reply) {
-    reply.view('home', { title: 'MyTweet Timeline' });
+    const user = request.payload;
+    User.findOne({ email: user.email }).then(foundUser => {
+      if (foundUser && foundUser.password === user.password) {
+        request.cookieAuth.set({
+          loggedIn: true,
+          loggedInUser: user.email,
+        });
+        reply.redirect('/home');
+      } else {
+        reply.redirect('/signup');
+      }
+    }).catch(err => {
+      reply.redirect('/');
+    });
   },
+
 };
 
 exports.register = {
 
+  auth: false,
   handler: function (request, reply) {
     const user = new User(request.payload);
 
