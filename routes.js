@@ -13,9 +13,11 @@ module.exports = [
   { method: 'GET', path: '/logout', config: Accounts.logout },
 
   { method: 'GET', path: '/home', config: Tweets.home },
+  { method: 'GET', path: '/newtweet', config: Tweets.newtweet },
 
   { method: 'POST', path: '/register', config: Accounts.register },
   { method: 'POST', path: '/login', config: Accounts.authenticate },
+  { method: 'POST', path: '/posttweet', config: Tweets.posttweet },
 
   {
     method: 'GET',

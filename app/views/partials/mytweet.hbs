@@ -1,8 +1,14 @@
 <section class="ui raised segment">
     <div class="ui two column grid ">
         <div class="ui form ten wide column">
-            <form action="/tweet" method="POST">
-                <button class="ui blue submit button">Tweet</button>
+            <form action="/posttweet" method="POST">
+                <div class="field">
+                    <textarea rows="1" maxlength="20" placeholder="Subject" name="subject"></textarea>
+                </div>
+                <div class="field">
+                    <textarea maxlength="140" name="tweettext" id="tweettext" placeholder="What's on your mind?"></textarea>
+                </div>
+                <button class="ui blue submit button"><i class="twitter icon"></i>Tweet</button>
             </form>
         </div>
         <div class="six wide column">
