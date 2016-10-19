@@ -1,6 +1,7 @@
 'use strict';
 
 const Hapi = require('hapi');
+const Joi = require('joi');
 
 var server = new Hapi.Server();
 server.connection({ port: process.env.PORT || 4000 });
