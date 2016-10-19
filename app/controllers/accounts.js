@@ -30,3 +30,16 @@ exports.authenticate = {
     reply.view('home', { title: 'MyTweet Timeline' });
   },
 };
+
+exports.register = {
+
+  handler: function (request, reply) {
+    const user = new User(request.payload);
+
+    user.save().then(newUser => {
+      reply.redirect('/login');
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
