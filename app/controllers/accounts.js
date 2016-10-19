@@ -26,6 +26,20 @@ exports.login = {
   },
 };
 
+exports.register = {
+
+  auth: false,
+  handler: function (request, reply) {
+    const user = new User(request.payload);
+
+    user.save().then(newUser => {
+      reply.redirect('/login');
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
+
 exports.authenticate = {
   auth: false,
   handler: function (request, reply) {
@@ -47,16 +61,10 @@ exports.authenticate = {
 
 };
 
-exports.register = {
-
+exports.logout = {
   auth: false,
   handler: function (request, reply) {
-    const user = new User(request.payload);
-
-    user.save().then(newUser => {
-      reply.redirect('/login');
-    }).catch(err => {
-      reply.redirect('/');
-    });
+    request.cookieAuth.clear();
+    reply.redirect('/');
   },
 };
