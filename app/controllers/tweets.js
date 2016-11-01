@@ -40,14 +40,16 @@ exports.posttweet = {
   },
 };
 
-/*exports.deleteTweet = {
- handler: function (request, reply) {
- let id = request.params.id;
- Tweet.findOneAndRemove({ _id: id }).cath(err => {
- reply.redirect('/');
- });
- },
- };*/
+/*
+exports.deleteTweet = {
+  handler: function (request, reply) {
+    let id = request.params.id;
+    Tweet.findOneAndRemove({ _id: id }).cath(err => {
+      reply.redirect('/');
+    });
+  },
+};
+*/
 
 exports.deleteTweetsAll = {
   handler: function (request, reply) {

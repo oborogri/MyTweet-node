@@ -108,3 +108,58 @@ exports.logout = {
     reply.redirect('/');
   },
 };
+
+exports.viewSettings = {
+
+  handler: function (request, reply) {
+    var userEmail = request.auth.credentials.loggedInUser;
+    User.findOne({ email: userEmail }).then(foundUser => {
+      reply.view('settings', { title: 'Edit Account Settings', user: foundUser });
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
+
+exports.updateSettings = {
+
+  validate: {
+
+    payload: {
+      firstName: Joi.string().required(),
+      lastName: Joi.string().required(),
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+    },
+
+    failAction: function (request, reply, source, error) {
+      reply.view('settings', {
+        title: 'Settings update error',
+        errors: error.data.details,
+      }).code(400);
+    },
+
+    options: {
+      abortEarly: false,
+    },
+  },
+
+  handler: function (request, reply) {
+    const editedUser = request.payload;
+    const loggedInUserEmail = request.auth.credentials.loggedInUser;
+
+    User.findOne({ email: loggedInUserEmail }).then(user => {
+      user.firstName = editedUser.firstName;
+      user.lastName = editedUser.lastName;
+      user.email = editedUser.email;
+      user.password = editedUser.password;
+      return user.save();
+    }).then(user => {
+      reply.view('home', { title: 'MyTweet Timeline', user: user });
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+
+};
+
