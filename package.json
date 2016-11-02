@@ -17,6 +17,7 @@
     "joi": "^9.2.0",
     "moment": "^2.15.2",
     "mongoose": "^4.6.3",
+    "mongoose-seeder": "^1.2.1",
     "vision": "^4.1.0"
   }
 }

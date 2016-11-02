@@ -5,6 +5,7 @@
 
 const User     = require('../models/user');
 const Tweet    = require('../models/tweet');
+const Joi = require('joi');
 var dateFormat = require('dateformat');
 var now        = null;
 
@@ -29,11 +30,38 @@ exports.newtweet = {
 };
 
 exports.posttweet = {
-  auth: false,
+
+  validate: {
+
+    payload: {
+      text: Joi.string().required(),
+      subject: Joi.required(),
+    },
+
+    options: {
+      abortEarly: false,
+    },
+
+    failAction: function (request, reply, source, error) {
+      Tweet.find({}).then(tweetsAll => {
+        reply.view('newtweet', {
+          title: 'Message can\'t be blanc!',
+          tweets: tweetsAll,
+          errors: error.data.details,
+        }).code(400);
+      }).catch(err => {
+        reply.redirect('/home');
+      });
+    },
+  },
   handler: function (request, reply) {
     const tweet = new Tweet(request.payload);
     now = new Date();
     tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');
+    if (request.payload.subject == '') {
+      tweet.subject = 'no subject';
+    }
+
     tweet.save().then(newTweet => {
       reply.redirect('/home');
     }).catch(err => {

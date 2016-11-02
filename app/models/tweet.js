@@ -5,11 +5,11 @@ const mongoose = require('mongoose');
 const User = require('../models/user');
 
 const tweetSchema = mongoose.Schema({
-  tweettext: String,
-  subject:   String,
-  date:      String,
+  text:    String,
+  subject: String,
+  date:    String,
 
-  user: {
+  sender: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
