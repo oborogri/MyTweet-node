@@ -23,6 +23,7 @@ module.exports = [
 
   { method: 'POST', path: '/posttweet', config: Tweets.posttweet },
   { method: 'POST', path: '/deleteTweetsAll', config: Tweets.deleteTweetsAll },
+  { method: 'POST', path: '/deleteTweet', config: Tweets.deleteTweet },
 
   {
     method: 'GET',

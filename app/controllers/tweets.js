@@ -37,21 +37,22 @@ exports.posttweet = {
     tweet.save().then(newTweet => {
       reply.redirect('/home');
     }).catch(err => {
-      reply.redirect('/tweet');
-    });
-  },
-};
-
-/*
-exports.deleteTweet = {
-  handler: function (request, reply) {
-    let id = request.params.id;
-    Tweet.findOneAndRemove({ _id: id }).catch(err => {
       reply.redirect('/');
     });
   },
 };
-*/
+
+exports.deleteTweet = {
+  handler: function (request, reply) {
+    let id = null;
+    id = request.payload.tweet;
+    Tweet.remove({ _id: { $in: id } }).then(newTweet => {
+      reply.redirect('/home');
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
 
 exports.deleteTweetsAll = {
   handler: function (request, reply) {
