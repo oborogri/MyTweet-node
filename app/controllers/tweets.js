@@ -3,9 +3,10 @@
  */
 'use strict';
 
-const User = require('../models/user');
-const Tweet = require('../models/tweet');
-const dateTime = require('moment');
+const User     = require('../models/user');
+const Tweet    = require('../models/tweet');
+var dateFormat = require('dateformat');
+var now        = null;
 
 exports.home = {
   handler: function (request, reply) {
@@ -31,7 +32,8 @@ exports.posttweet = {
   auth: false,
   handler: function (request, reply) {
     const tweet = new Tweet(request.payload);
-    tweet.date = dateTime().format('llll');
+    now = new Date();
+    tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');
     tweet.save().then(newTweet => {
       reply.redirect('/home');
     }).catch(err => {
@@ -44,7 +46,7 @@ exports.posttweet = {
 exports.deleteTweet = {
   handler: function (request, reply) {
     let id = request.params.id;
-    Tweet.findOneAndRemove({ _id: id }).cath(err => {
+    Tweet.findOneAndRemove({ _id: id }).catch(err => {
       reply.redirect('/');
     });
   },

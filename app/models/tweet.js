@@ -6,8 +6,8 @@ const User = require('../models/user');
 
 const tweetSchema = mongoose.Schema({
   tweettext: String,
-  subject: String,
-  date: Date,
+  subject:   String,
+  date:      String,
 
   user: {
     type: mongoose.Schema.Types.ObjectId,

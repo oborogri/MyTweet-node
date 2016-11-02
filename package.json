@@ -9,12 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dateformat": "^1.0.12",
     "handlebars": "^4.0.5",
     "hapi": "^15.1.1",
     "hapi-auth-cookie": "^6.1.1",
     "inert": "^4.0.2",
     "joi": "^9.2.0",
-    "moment": "^2.15.2",
     "mongoose": "^4.6.3",
     "vision": "^4.1.0"
   }
