@@ -30,7 +30,7 @@ exports.home = {
 exports.timeline = {
   handler: function (request, reply) {
     Tweet.find({}).populate('sender').then(allTweets => {
-      reply.view('home', {
+        reply.view('home', {
         title: 'MyTweet Timeline',
         tweets: allTweets,
         _id: 'timeline',

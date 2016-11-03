@@ -1,11 +1,11 @@
-{{> mainmenu _id="settings" }}
+{{> welcomemenu _id="admin" }}
 
 <section class="ui raised segment">
     <div class="ui two column grid">
         <div class="ui ten wide column">
             <div class="ui stacked fluid form segment">
-                <form action="/update_settings" method="POST">
-                    <h3 class="ui header">Update personal details</h3>
+                <form action="/admin_register" method="POST">
+                    <h3 class="ui header">Create MyTweet administrator account</h3>
                     <div class="two fields">
                         <div class="field">
                             <label>First Name</label>
@@ -21,10 +21,10 @@
                         <input placeholder="Email" type="text" name="email">
                     </div>
                     <div class="field">
-                        <label>Password</label>
+                        <label>Key</label>
                         <input type="password" name="password">
                     </div>
-                    <button class="ui blue submit button"><i class="checkmark icon"></i>Update</button>
+                    <button class="ui blue submit button"><i class="twitter square icon"></i>Create</button>
                 </form>
                 {{> formerror }}
             </div>

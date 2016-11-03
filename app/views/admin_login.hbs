@@ -1,4 +1,4 @@
-{{> welcomemenu _id="login" }}
+{{> welcomemenu _id="admin_login" }}
 
 <section class="ui raised segment">
     <div class="ui grid">
@@ -7,18 +7,24 @@
         </aside>
         <div class="ui ten wide column fluid form">
             <div class="ui stacked segment">
-                <form action="/authenticate" method="POST">
-                    <h3 class="ui header">Sign in to MyTweet</h3>
+                <div class="ui info message">
+                    Login with your administrator credentials
+                </div>
+                <form action="/admin_authenticate" method="POST">
                     <div class="field">
                         <label>Username</label> <input placeholder="Email" type="text"
-                                                    name="email">
+                                                       name="email">
                     </div>
                     <div class="field">
                         <label>Password</label> <input type="password" name="password">
                     </div>
-                    <button class="ui blue submit button"><i class="sign in icon"></i>Sign in</button>
+                    <button class="ui blue submit button"><i class="sign in icon"></i>Admin login </button>
                 </form>
                 {{> formerror }}
+                <div class="ui info message">
+                    <i class="icon help"></i>
+                    Don't have an administrator login? Create an account <a href="/admin_signup"><em>here</em></a> with your admin key.
+                </div>
             </div>
         </div>
     </div>

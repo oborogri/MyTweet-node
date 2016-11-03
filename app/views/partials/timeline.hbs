@@ -39,8 +39,11 @@
                         <div class="ui buttons">
                             <button class="ui positive button" id="delete_tweet">Delete selected
                             </button>
+                            <!--<script>
+                                document.getElementById("delete_tweet").setAtribute('disabled', '{{disable}}');
+                            </script>-->
                             <div class="or"></div>
-                            <button class="ui negative button" formaction="/deleteTweetsAll">
+                            <button class="ui negative button" id="delete_all" formaction="/deleteTweetsAll">
                                 <i class="remove circle icon"></i>Delete all
                             </button>
                         </div>

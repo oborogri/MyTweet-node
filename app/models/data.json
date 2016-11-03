@@ -31,6 +31,16 @@
     }
   },
 
+  "admins": {
+    "_model": "Admin",
+    "homer": {
+      "firstName": "Greg",
+      "lastName": "Oboroceanu",
+      "email": "greg@wit.ie",
+      "password": "adminkey"
+    }
+  },
+
   "tweets": {
     "_model": "Tweet",
     "one": {
