@@ -21,12 +21,13 @@
                     <tr>
                         <td>
                             <div class="ui checkbox">
-                                <input type="checkbox" name="tweet" value="{{_id}}">
+                                <input type="checkbox" id="checkbox" name="tweet" value="{{_id}}">
                                 <label></label>
                             </div>
                         </td>
                         <td> {{subject}}       </td>
-                        <td><a id="user_timeline" class="item" href="/user">{{sender.email}}</a></td>
+                        <td><button class="ui small button" formaction="/user_timeline" value="{{sender.email}}"
+                                    name="sender">{{sender.email}}</button></td>
                         <td> {{date}}          </td>
                         <td> {{text}}          </td>
                     </tr>

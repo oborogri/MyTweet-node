@@ -41,6 +41,24 @@ exports.timeline = {
   },
 };
 
+exports.user_timeline = {
+  handler: function (request, reply) {
+    const userEmail = request.payload.sender;
+    User.findOne({ email: userEmail }).then(user => {
+      const userId = user.id;
+      return Tweet.find({ sender: userId });
+    }).then(allTweets => {
+      reply.view('user_timeline', {
+        title: 'User Timeline',
+        tweets: allTweets,
+        _id: 'user_timeline',
+      });
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
+
 exports.newtweet = {
   handler: function (request, reply) {
     reply.view('newtweet', { title: 'New Tweet' });
