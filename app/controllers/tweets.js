@@ -11,10 +11,29 @@ var now        = null;
 
 exports.home = {
   handler: function (request, reply) {
-    Tweet.find({}).populate('user').then(allTweets => {
+    const userEmail = request.auth.credentials.loggedInUser;
+    User.findOne({ email: userEmail }).then(user => {
+      const userId = user.id;
+      return Tweet.find({ sender: userId });
+    }).then(allTweets => {
+      reply.view('home', {
+        title: 'MyTweet Home',
+        tweets: allTweets,
+        _id: 'home',
+      });
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
+
+exports.timeline = {
+  handler: function (request, reply) {
+    Tweet.find({}).populate('sender').then(allTweets => {
       reply.view('home', {
         title: 'MyTweet Timeline',
         tweets: allTweets,
+        _id: 'timeline',
       });
     }).catch(err => {
       reply.redirect('/');
@@ -55,14 +74,18 @@ exports.posttweet = {
     },
   },
   handler: function (request, reply) {
-    const tweet = new Tweet(request.payload);
-    now = new Date();
-    tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');
-    if (request.payload.subject == '') {
-      tweet.subject = 'no subject';
-    }
+    const userEmail = request.auth.credentials.loggedInUser;
+    User.findOne({ email: userEmail }).then(sender => {
+      const tweet = new Tweet(request.payload);
+      tweet.sender = sender;
+      now = new Date();
+      tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');
+      if (request.payload.subject == '') {
+        tweet.subject = 'no subject';
+      }
 
-    tweet.save().then(newTweet => {
+      return tweet.save();
+    }).then(newTweet => {
       reply.redirect('/home');
     }).catch(err => {
       reply.redirect('/');
