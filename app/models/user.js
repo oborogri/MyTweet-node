@@ -10,6 +10,8 @@ const userSchema = mongoose.Schema({
   lastName: String,
   email: String,
   password: String,
+  joined: String,
+  posts: Number,
 });
 
 const User = mongoose.model('User', userSchema);

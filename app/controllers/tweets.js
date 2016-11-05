@@ -15,7 +15,7 @@ exports.home = {
     const userEmail = request.auth.credentials.loggedInUser;
     User.findOne({ email: userEmail }).then(user => {
       const userId = user.id;
-      return Tweet.find({ sender: userId });
+      return Tweet.find({ sender: userId }).populate('sender');
     }).then(allTweets => {
       reply.view('home', {
         title: 'MyTweet Home',
@@ -28,11 +28,11 @@ exports.home = {
   },
 };
 
-//renders global timeline
+//renders all users timeline
 exports.timeline = {
   handler: function (request, reply) {
     Tweet.find({}).populate('sender').then(allTweets => {
-        reply.view('global_timeline', {
+        reply.view('users_timeline', {
           title: 'MyTweet Timeline',
           tweets: allTweets,
           _id: 'timeline',
@@ -49,7 +49,7 @@ exports.user_timeline = {
     const userEmail = request.payload.sender;
     User.findOne({ email: userEmail }).then(user => {
       const userId = user.id;
-      return Tweet.find({ sender: userId });
+      return Tweet.find({ sender: userId }).populate('sender');
     }).then(allTweets => {
       reply.view('user_timeline', {
         title: 'User Timeline',
@@ -101,6 +101,8 @@ exports.posttweet = {
     User.findOne({ email: userEmail }).then(sender => {
       const tweet = new Tweet(request.payload);
       tweet.sender = sender;
+      sender.posts += 1;
+      sender.save();
       now = new Date();
       tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');
       if (request.payload.subject == '') {

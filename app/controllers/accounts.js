@@ -6,6 +6,8 @@
 const User = require('../models/user');
 const Admin = require('../models/admin');
 const Joi = require('joi');
+var dateFormat = require('dateformat');
+var now        = null;
 
 //renders MyTweet welcome page
 exports.main = {
@@ -23,27 +25,11 @@ exports.login = {
   },
 };
 
-//renders admin login page
-exports.admin_login = {
-  auth: false,
-  handler: function (request, reply) {
-    reply.view('admin_login', { title: 'Log in as Administrator' });
-  },
-};
-
 //renders user signup page
 exports.signup = {
   auth: false,
   handler: function (request, reply) {
     reply.view('signup', { title: 'Sign up for MyTweet' });
-  },
-};
-
-//renders admin signup page
-exports.admin_signup = {
-  auth: false,
-  handler: function (request, reply) {
-    reply.view('admin_signup', { title: 'Create MyTweet admin account' });
   },
 };
 
@@ -72,43 +58,10 @@ exports.register = {
   },
   handler: function (request, reply) {
     const user = new User(request.payload);
-
+    now = new Date();
+    user.joined = dateFormat(now, 'ddd, mmm dS, yyyy');
     user.save().then(newUser => {
       reply.redirect('/login');
-    }).catch(err => {
-      reply.redirect('/');
-    });
-  },
-};
-
-//register new administrator
-exports.admin_register = {
-  auth: false,
-  validate: {
-
-    payload: {
-      firstName: Joi.string().required(),
-      lastName: Joi.string().required(),
-      email: Joi.string().email().required(),
-      password: Joi.string().required(),
-    },
-
-    failAction: function (request, reply, source, error) {
-      reply.view('admin_signup', {
-        title: 'Sign up error',
-        errors: error.data.details,
-      }).code(400);
-    },
-
-    options: {
-      abortEarly: false,
-    },
-  },
-  handler: function (request, reply) {
-    const admin = new Admin(request.payload);
-
-    admin.save().then(newAdmin => {
-      reply.redirect('/admin_login');
     }).catch(err => {
       reply.redirect('/');
     });
@@ -148,47 +101,6 @@ exports.authenticate = {
         reply.redirect('/home');
       } else {
         reply.redirect('/signup');
-      }
-    }).catch(err => {
-      reply.redirect('/');
-    });
-  },
-
-};
-
-//admin authentication
-exports.admin_authenticate = {
-  auth: false,
-
-  validate: {
-
-    payload: {
-      email: Joi.string().email().required(),
-      password: Joi.string().required(),
-    },
-
-    failAction: function (request, reply, source, error) {
-      reply.view('admin_login', {
-        title: 'Login error',
-        errors: error.data.details,
-      }).code(400);
-    },
-
-    options: {
-      abortEarly: false,
-    },
-  },
-  handler: function (request, reply) {
-    const admin = request.payload;
-    Admin.findOne({ email: admin.email }).then(foundAdmin => {
-      if (foundAdmin && foundAdmin.password === admin.password) {
-        request.cookieAuth.set({
-          loggedIn: true,
-          loggedInUser: admin.email,
-        });
-        reply.redirect('/admin_home');
-      } else {
-        reply.redirect('/');
       }
     }).catch(err => {
       reply.redirect('/');
