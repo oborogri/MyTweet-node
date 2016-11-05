@@ -9,6 +9,7 @@ const Joi = require('joi');
 var dateFormat = require('dateformat');
 var now        = null;
 
+//renders logged in user's timeline as home page
 exports.home = {
   handler: function (request, reply) {
     const userEmail = request.auth.credentials.loggedInUser;
@@ -27,20 +28,22 @@ exports.home = {
   },
 };
 
+//renders global timeline
 exports.timeline = {
   handler: function (request, reply) {
     Tweet.find({}).populate('sender').then(allTweets => {
-        reply.view('home', {
-        title: 'MyTweet Timeline',
-        tweets: allTweets,
-        _id: 'timeline',
-      });
-    }).catch(err => {
+        reply.view('global_timeline', {
+          title: 'MyTweet Timeline',
+          tweets: allTweets,
+          _id: 'timeline',
+        });
+      }).catch(err => {
       reply.redirect('/');
     });
   },
 };
 
+//renders specific users timeline
 exports.user_timeline = {
   handler: function (request, reply) {
     const userEmail = request.payload.sender;
@@ -59,6 +62,7 @@ exports.user_timeline = {
   },
 };
 
+//renders create new tweet view
 exports.newtweet = {
   handler: function (request, reply) {
     reply.view('newtweet', { title: 'New Tweet' });
@@ -66,6 +70,7 @@ exports.newtweet = {
 
 };
 
+//creates and post a new tweet to the timeline
 exports.posttweet = {
 
   validate: {
@@ -111,6 +116,7 @@ exports.posttweet = {
   },
 };
 
+//facilitates deleting a specific tweet
 exports.deleteTweet = {
   handler: function (request, reply) {
     let id = null;
@@ -123,6 +129,7 @@ exports.deleteTweet = {
   },
 };
 
+//facilitates deleting all tweets
 exports.deleteTweetsAll = {
   handler: function (request, reply) {
     Tweet.remove(function (err, p) {
@@ -139,4 +146,22 @@ exports.deleteTweetsAll = {
       reply.redirect('/');
     });
   },
+};
+
+//facilitates deleting a specific user all tweets
+exports.userDeleteTweetsAll = {
+  handler: function (request, reply) {
+      const userEmail = request.auth.credentials.loggedInUser;
+      User.findOne({ email: userEmail }).then(user => {
+        const userId = user.id;
+        return Tweet.remove({ sender: userId });
+      }).then(allTweets => {
+        reply.view('home', {
+          title: 'MyTweet Home',
+          _id: 'home',
+        });
+      }).catch(err => {
+        reply.redirect('/');
+      });
+    },
 };
