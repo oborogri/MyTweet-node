@@ -1,10 +1,10 @@
 <section class="ui raised segment">
     <div class="ui grid">
         <asside class="six wide column">
-            <img src="images/timeline.jpg" class="ui medium image">
+            <img src="images/users.jpg" class="ui medium image">
         </asside>
         <article class="ten wide column">
-            <h4>MyTweet Users</h4>
+            <h4>MyTweet Users: {{users.length}}</h4>
         <form class="ui form" action="/deleteUser" method="POST">
             <table class="ui selectable striped table segment">
                 <thead>
@@ -28,7 +28,7 @@
                         </td>
                         <td> {{firstName}} </td>
                         <td> {{lastName}}  </td>
-                        <td><button class="ui small button" id="userEmail" formaction="/user_profile" value="{{email}}"
+                        <td><button class="ui small button" name="userEmail" formaction="/user_profile" value="{{email}}"
                                     name="user">{{email}}</button></td>
                         <td> {{joined}}   </td>
                         <td> {{posts}}    </td>

@@ -1,7 +1,7 @@
 <section class="ui raised segment">
     <div class="ui grid">
         <asside class="six wide column">
-            <img src="images/timeline.jpg" class="ui medium image">
+            <img src="images/admintimeline.jpg" class="ui medium image">
         </asside>
         <article class="ten wide column">
             <h4>MyTweet Timeline</h4>
@@ -9,7 +9,7 @@
                 <table class="ui selectable striped table segment">
                     <thead>
                     <tr>
-                        <th>Select user </th>
+                        <th>Select </th>
                         <th>Subject</th>
                         <th>From   </th>
                         <th>Sent   </th>
@@ -21,13 +21,12 @@
                         <tr>
                             <td>
                                 <div class="ui checkbox">
-                                    <input type="checkbox" id="checkbox" name="tweet" value="{{_id}}">
+                                    <input type="checkbox" id="checkbox" name="user" value="{{_id}}">
                                     <label></label>
                                 </div>
                             </td>
                             <td> {{subject}}       </td>
-                            <td><button class="ui small button" id="senderEmail" formaction="/user_profile" value="{{sender.email}}"
-                                        name="sender">{{sender.email}}</button></td>
+                            <td> {{sender.email}}  </td>
                             <td> {{date}}          </td>
                             <td> {{text}}          </td>
                         </tr>

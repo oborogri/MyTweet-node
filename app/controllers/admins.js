@@ -15,6 +15,40 @@ exports.admin_login = {
   },
 };
 
+//renders specific users timeline in admin
+exports.adminUser_timeline = {
+  handler: function (request, reply) {
+    const userEmail = request.payload.user;
+    User.findOne({ email: userEmail }).then(user => {
+      const userId = user.id;
+      return Tweet.find({ sender: userId }).populate('sender');
+    }).then(allTweets => {
+      reply.view('adminUser_timeline', {
+        title: 'User Timeline',
+        tweets: allTweets,
+        _id: 'user_timeline',
+      });
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
+
+//renders user profile view
+exports.user_profile = {
+  handler: function (request, reply) {
+    const userEmail = request.payload.userEmail;
+    User.findOne({ email: userEmail }).then(user => {
+      reply.view('user_profile',
+          { title: 'User Profile',
+            user: user,
+            _id: 'userslist', });
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
+
 //renders admin signup page
 exports.admin_signup = {
   auth: false,
@@ -115,9 +149,8 @@ exports.admin_timeline = {
 //facilitates admin deleting a specific tweet
 exports.adminDeleteTweet = {
   handler: function (request, reply) {
-    let id = null;
-    id = request.payload.tweet;
-    Tweet.remove({ _id: { $in: id } }).then(newTweet => {
+    const tweetId = request.payload.user;
+    Tweet.remove({ _id: { $in: tweetId } }).then(allTweets => {
       reply.redirect('/admin_timeline');
     }).catch(err => {
       reply.redirect('/');
@@ -128,6 +161,12 @@ exports.adminDeleteTweet = {
 //facilitates deleting all tweets
 exports.adminDeleteTweetsAll = {
   handler: function (request, reply) {
+    User.find({}).then(allUsers => {
+      allUsers.forEach(user => {
+        user.posts = 0;
+      });
+      return user.save();
+    });
     Tweet.remove(function (err, p) {
       if (err) {
         throw err;
