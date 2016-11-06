@@ -46,6 +46,13 @@
       "lastName": "Oboroceanu",
       "email": "greg@wit.ie",
       "password": "adminkey"
+    },
+
+    "greg": {
+      "firstName": "Greg",
+      "lastName": "Oboroceanu",
+      "email": "greg@mail.ru",
+      "password": "secret"
     }
   },
 

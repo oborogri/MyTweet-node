@@ -143,3 +143,50 @@ exports.adminDeleteTweetsAll = {
     });
   },
 };
+
+//renders all users list
+exports.userslist = {
+  handler: function (request, reply) {
+    User.find({}).populate('user').then(allUsers => {
+      reply.view('userslist', {
+        title: 'MyTweet Users',
+        users: allUsers,
+        _id: 'userslist',
+      });
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
+
+//facilitates deleting a specific user
+exports.deleteUser = {
+  handler: function (request, reply) {
+    let id = null;
+    id = request.payload.user;
+    User.remove({ _id: { $in: id } }).then(newUser => {
+      reply.redirect('/userslist');
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
+
+//facilitates deleting all users
+exports.deleteUsersAll = {
+  handler: function (request, reply) {
+    User.remove(function (err, p) {
+      if (err) {
+        throw err;
+      } else {
+        console.log('No Of Users deleted:' + p);
+      }
+    }).then(allTweets => {
+      reply.view('userslist', {
+        title: 'MyTweet Users',
+      });
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};

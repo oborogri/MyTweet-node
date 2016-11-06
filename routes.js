@@ -32,10 +32,15 @@ module.exports = [
   { method: 'GET', path: '/admin_timeline',      config: Admins.admin_timeline },
   { method: 'GET', path: '/admin_signup',        config: Admins.admin_signup },
   { method: 'GET', path: '/admin_login',         config: Admins.admin_login },
+  { method: 'GET', path: '/userslist',           config: Admins.userslist },
+
   { method: 'POST', path: '/admin_register',     config: Admins.admin_register },
   { method: 'POST', path: '/admin_authenticate',   config: Admins.admin_authenticate },
   { method: 'POST', path: '/adminDeleteTweet',     config: Admins.adminDeleteTweet },
   { method: 'POST', path: '/adminDeleteTweetsAll', config: Admins.adminDeleteTweetsAll },
+
+  { method: 'POST', path: '/deleteUser',           config: Admins.deleteUser },
+  { method: 'POST', path: '/deleteUsersAll',       config: Admins.deleteUsersAll },
 
   {
     method: 'GET',
