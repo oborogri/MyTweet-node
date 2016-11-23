@@ -16,3 +16,15 @@ exports.find = {
   },
 
 };
+exports.findOne = {
+
+  auth: false,
+
+  handler: function (request, reply) {
+    Tweet.findOne({ _id: request.params.id }).then(tweet => {
+      reply(tweet);
+    }).catch(err => {
+      reply(Boom.notFound('id not found'));
+    });
+  },
+};
