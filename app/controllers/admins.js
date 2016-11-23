@@ -82,7 +82,6 @@ exports.admin_register = {
   },
   handler: function (request, reply) {
     const admin = new Admin(request.payload);
-
     admin.save().then(newAdmin => {
       reply.redirect('/admin_login');
     }).catch(err => {

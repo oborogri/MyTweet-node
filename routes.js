@@ -45,6 +45,8 @@ module.exports = [
   { method: 'POST', path: '/deleteUser',           config: Admins.deleteUser },
   { method: 'POST', path: '/deleteUsersAll',       config: Admins.deleteUsersAll },
 
+
+
   {
     method: 'GET',
     path: '/{param*}',
