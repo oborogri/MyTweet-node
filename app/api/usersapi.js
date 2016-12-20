@@ -55,7 +55,7 @@ exports.deleteOne = {
 /*
 Create new user
  */
-exports.create = {
+exports.createUser = {
 
   auth: false,
 
