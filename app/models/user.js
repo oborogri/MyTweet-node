@@ -11,7 +11,7 @@ const userSchema = mongoose.Schema({
   email: String,
   password: String,
   joined: String,
-  posts: Number,
+  tweets: Number,
 });
 
 const User = mongoose.model('User', userSchema);

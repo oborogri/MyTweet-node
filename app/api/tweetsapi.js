@@ -6,12 +6,28 @@ const Boom = require('boom');
 /*
 Find all tweets
  */
-exports.find = {
+exports.findAllTweets = {
 
   auth: false,
 
   handler: function (request, reply) {
-    Tweet.find({}).exec().then(tweets => {
+    Tweet.find({}).populate('sender').then(tweets => {
+      reply(tweets);
+    }).catch(err => {
+      reply(Boom.badImplementation('error accessing db'));
+    });
+  },
+};
+
+/*
+Find a specific user's tweets
+ */
+exports.findUsersTweets = {
+
+  auth: false,
+
+  handler: function (request, reply) {
+    Tweet.find({ sender: request.params.id }).then(tweets => {
       reply(tweets);
     }).catch(err => {
       reply(Boom.badImplementation('error accessing db'));
@@ -29,11 +45,16 @@ exports.findOne = {
 
   handler: function (request, reply) {
     Tweet.findOne({ _id: request.params.id }).then(tweet => {
-      reply(tweet);
+      if (tweet != null) {
+        reply(tweet);
+      }
+
+      reply(Boom.notFound('id not found'));
     }).catch(err => {
       reply(Boom.notFound('id not found'));
     });
   },
+
 };
 
 /*
@@ -53,9 +74,28 @@ exports.deleteOne = {
 };
 
 /*
+Create a new tweet and associate it with a specific user
+ */
+exports.createTweet = {
+
+  auth: false,
+
+  handler: function (request, reply) {
+    const tweet = new Tweet(request.payload);
+    tweet.sender = request.params.id;
+    tweet.save().then(newTweet => {
+      reply(newTweet).code(201);
+    }).catch(err => {
+      reply(Boom.badImplementation('error creating tweet'));
+    });
+  },
+
+};
+
+/*
 Delete all tweets
  */
-exports.deleteAll = {
+exports.deleteAllTweets = {
 
   auth: false,
 
@@ -67,21 +107,4 @@ exports.deleteAll = {
     });
   },
 
-};
-
-/*
-Create new tweet
- */
-exports.createTweet = {
-
-  auth: false,
-
-  handler: function (request, reply) {
-    const tweet = new Tweet(request.payload);
-    tweet.save().then(newTweet => {
-      reply(newTweet).code(201);
-    }).catch(err => {
-      reply(Boom.badImplementation('error creating Tweet'));
-    });
-  },
 };

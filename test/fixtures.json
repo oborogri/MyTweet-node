@@ -1,4 +1,5 @@
 {
+  "tweetService": "http://localhost:4000",
   "users": [
     {
       "firstName": "Homer",
@@ -6,7 +7,7 @@
       "email":     "homer@simpson.com",
       "password":  "secret",
       "joined":    "Wed, Nov 2nd, 2016",
-      "posts":      4
+      "tweets":      4
     },
     {
     "firstName": "Marge",
@@ -14,7 +15,7 @@
     "email":     "marge@simpson.com",
     "password":  "secret",
     "joined":    "Thur, Nov 3rd, 2016",
-    "posts":      2
+    "tweets":      2
     },
     {
     "firstName": "Bart",
@@ -22,9 +23,24 @@
     "email":     "bart@simpson.com",
     "password":  "secret",
     "joined":    "Fri, Nov 4th, 2016",
-    "posts":      1
+    "tweets":      1
     }
     ],
+
+  "tweets": [
+    {
+      "text": "What are you up to?",
+      "subject": "ping",
+      "date": "Wed, Nov 2nd, 2016, 9:45:03 PM"
+    },
+
+    {
+      "text": "I'm just back from work?",
+      "subject": "pong",
+      "date": "Wed, Nov 2nd, 2016, 9:49:07 PM"
+    }
+  ],
+
   "newUser":
   {
     "firstName": "Barnie",
@@ -32,6 +48,13 @@
     "email":     "barnie@grumble.com",
     "password":  "secret",
     "joined":    "Sat, Nov 5th, 2016",
-    "posts":      1
+    "tweets":      1
+  },
+
+  "newTweet":
+  {
+    "text": "I'm a tester?",
+    "subject": "test",
+    "date": "Tue, Dec 20th, 2016, 9:49:07 PM"
   }
 }

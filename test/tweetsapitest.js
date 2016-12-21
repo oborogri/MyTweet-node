@@ -1,99 +1,58 @@
 'use strict';
 
 const assert = require('chai').assert;
-var request = require('sync-request');
+const TweetService = require('./tweet-service');
+const fixtures = require('./fixtures.json');
+const _ = require('lodash');
 
 suite('Tweet API tests', function () {
 
-  test('get tweets', function () {
+  let tweets = fixtures.tweets;
+  let newUser = fixtures.newUser;
 
-    const url = 'http://localhost:4000/api/tweets';
-    var res = request('GET', url);
-    const tweets = JSON.parse(res.getBody('utf8'));
-    assert.equal(4, tweets.length);
+  const tweetService = new TweetService(fixtures.tweetService);
 
-    assert.equal(tweets[0].text, 'What are you up to?');
-    assert.equal(tweets[0].subject, 'ping');
-    assert.equal(tweets[0].date, 'Wed, Nov 2nd, 2016, 9:45:03 PM');
-
-    assert.equal(tweets[1].text, 'I\'m just back from work?');
-    assert.equal(tweets[1].subject, 'pong');
-    assert.equal(tweets[1].date, 'Wed, Nov 2nd, 2016, 9:49:07 PM');
-
-    assert.equal(tweets[2].text, 'Up the Rebels!');
-    assert.equal(tweets[2].subject, '#rebels');
-    assert.equal(tweets[2].date, 'Thu, Nov 3rd, 2016, 5:45:05 PM');
-
-    assert.equal(tweets[3].text, 'Got my tickets!!');
-    assert.equal(tweets[3].subject, 'cold play');
-    assert.equal(tweets[3].date, 'Thu, Nov 3rd, 2016, 6:15:10 PM');
+  beforeEach(function () {
+    tweetService.deleteAllUsers();
+    tweetService.deleteAllTweets();
   });
 
-  test('get one tweet', function () {
-
-    const allTweetsUrl = 'http://localhost:4000/api/tweets';
-    var res = request('GET', allTweetsUrl);
-    const tweets = JSON.parse(res.getBody('utf8'));
-
-    const oneTweetUrl = allTweetsUrl + '/' + tweets[0]._id;
-    res = request('GET', oneTweetUrl);
-    const oneTweet = JSON.parse(res.getBody('utf8'));
-
-    assert.equal(oneTweet.text, 'What are you up to?');
-    assert.equal(oneTweet.subject, 'ping');
-    assert.equal(oneTweet.date, 'Wed, Nov 2nd, 2016, 9:45:03 PM');
-
+  afterEach(function () {
+    tweetService.deleteAllUsers();
+    tweetService.deleteAllTweets();
   });
 
   test('create a tweet', function () {
-
-    const usersUrl = 'http://localhost:4000/api/users';
-    var resUsers = request('GET', usersUrl);
-    const users = JSON.parse(resUsers.getBody('utf8'));
-    const tweetsUrl = 'http://localhost:4000/api/tweets';
-    const newTweet = {
-      text: 'What are you up to?',
-      subject: 'ping',
-      date: 'Tue, Dec 20th, 2016, 9:45:03 AM',
-      sender: users[0],
-    };
-
-    const res = request('POST', tweetsUrl, { json: newTweet });
-    const returnedTweet = JSON.parse(res.getBody('utf8'));
-    const tweets = JSON.parse(res.getBody('utf8'));
-
-    assert.equal(returnedTweet.text, 'What are you up to?');
-    assert.equal(returnedTweet.subject, 'ping');
-    assert.equal(returnedTweet.date, 'Tue, Dec 20th, 2016, 9:45:03 AM');
-    assert.equal(returnedTweet.sender, '5859589dd991e621e8b9907a');
-
-    const url = 'http://localhost:4000/api/tweets';
-    var resTweets = request('GET', url);
-    const tweetsAll = JSON.parse(resTweets.getBody('utf8'));
-    assert.equal(5, tweetsAll.length);
+    const returnedUser = tweetService.createUser(newUser);
+    tweetService.createTweet(returnedUser._id, tweets[0]);
+    const returnedTweets = tweetService.getUsersTweets(returnedUser._id);
+    assert.equal(returnedTweets.length, 1);
+    assert(_.some([returnedTweets[0]], tweets[0]), 'returned tweet must be a superset of tweet');
   });
 
-  test('delete one tweet', function () {
+  test('create multiple tweets', function () {
+    const returnedUser = tweetService.createUser(newUser);
+    for (var i = 0; i < tweets.length; i++) {
+      tweetService.createTweet(returnedUser._id, tweets[i]);
+    }
 
-    const allTweetsUrl = 'http://localhost:4000/api/tweets';
-    var res = request('GET', allTweetsUrl);
-    const tweets = JSON.parse(res.getBody('utf8'));
-    const oneTweetUrl = allTweetsUrl + '/' + tweets[0]._id;
-    var resDelete = request('DELETE', oneTweetUrl);
-
-    var resAll = request('GET', allTweetsUrl);
-    const tweetsAll = JSON.parse(resAll.getBody('utf8'));
-    assert.equal(tweetsAll.length, 4);
+    const returnedTweets = tweetService.getUsersTweets(returnedUser._id);
+    assert.equal(returnedTweets.length, tweets.length);
+    for (var i = 0; i < tweets.length; i++) {
+      assert(_.some([returnedTweets[i]], tweets[i]), 'returned tweet must be a superset of tweet');
+    }
   });
 
   test('delete all tweets', function () {
+    const returnedUser = tweetService.createUser(newUser);
+    for (var i = 0; i < tweets.length; i++) {
+      tweetService.createTweet(returnedUser._id, tweets[i]);
+    }
 
-    const allTweetsUrl = 'http://localhost:4000/api/tweets';
-    var resDeleteAll = request('DELETE', allTweetsUrl);
-
-    var resAll = request('GET', allTweetsUrl);
-    const tweetsAll = JSON.parse(resAll.getBody('utf8'));
-    assert.equal(tweetsAll.length, 0);
+    const t1 = tweetService.getUsersTweets(returnedUser._id);
+    assert.equal(t1.length, tweets.length);
+    tweetService.deleteAllTweets();
+    const t2 = tweetService.getUsersTweets(returnedUser._id);
+    assert.equal(t2.length, 0);
   });
 });
-

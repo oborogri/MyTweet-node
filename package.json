@@ -19,6 +19,7 @@
     "hapi-upload": "^1.0.0",
     "inert": "^4.0.2",
     "joi": "^9.2.0",
+    "lodash": "^4.17.2",
     "moment": "^2.15.2",
     "mongoose": "^4.6.3",
     "mongoose-seeder": "^1.2.1",

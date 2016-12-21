@@ -29,11 +29,16 @@ exports.findOne = {
 
   handler: function (request, reply) {
     User.findOne({ _id: request.params.id }).then(user => {
-      reply(user);
+      if (user != null) {
+        reply(user);
+      }
+
+      reply(Boom.notFound('id not found'));
     }).catch(err => {
       reply(Boom.notFound('id not found'));
     });
   },
+
 };
 
 /*
