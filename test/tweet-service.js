@@ -29,6 +29,10 @@ class TweetService {
     return this.httpService.delete('/api/tweets');
   }
 
+  deleteUsersTweets(id) {
+    return this.httpService.delete('/api/users/' + id + '/tweets');
+  }
+
   deleteOneTweet(id) {
     return this.httpService.delete('/api/tweets/' + id);
   }

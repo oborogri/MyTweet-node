@@ -43,6 +43,17 @@ suite('Tweet API tests', function () {
     }
   });
 
+  test('delete user tweets', function () {
+    const returnedUser = tweetService.createUser(newUser);
+    for (var i = 0; i < tweets.length; i++) {
+      tweetService.createTweet(returnedUser._id, tweets[i]);
+    }
+
+    tweetService.deleteUsersTweets(returnedUser._id);
+    const t = tweetService.getTweets(returnedUser._id);
+    assert.equal(t.length, 0);
+  });
+
   test('delete all tweets', function () {
     const returnedUser = tweetService.createUser(newUser);
     for (var i = 0; i < tweets.length; i++) {

@@ -108,3 +108,20 @@ exports.deleteAllTweets = {
   },
 
 };
+
+/*
+Delete a specific user's tweets
+ */
+
+exports.deleteUsersTweets = {
+
+  auth: false,
+
+  handler: function (request, reply) {
+    Tweet.remove({ sender: request.params.id }).then(result => {
+      reply().code(204);
+    }).catch(err => {
+      reply(Boom.badImplementation('error removing Tweets'));
+    });
+  },
+};
