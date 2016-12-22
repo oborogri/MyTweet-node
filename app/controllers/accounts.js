@@ -9,7 +9,9 @@ const Joi = require('joi');
 var dateFormat = require('dateformat');
 var now        = null;
 
-//renders MyTweet welcome page
+/*
+Renders MyTweet welcome page
+ */
 exports.main = {
   auth: false,
   handler: function (request, reply) {
@@ -17,7 +19,9 @@ exports.main = {
   },
 };
 
-//renders user signup page
+/*
+Renders user signup page
+ */
 exports.signup = {
   auth: false,
   handler: function (request, reply) {
@@ -25,7 +29,9 @@ exports.signup = {
   },
 };
 
-//register new user
+/*
+Register new user
+ */
 exports.register = {
   auth: false,
   validate: {
@@ -60,7 +66,9 @@ exports.register = {
   },
 };
 
-//user authentication
+/*
+User authentication
+ */
 exports.authenticate = {
   auth: false,
 
@@ -101,7 +109,9 @@ exports.authenticate = {
 
 };
 
-//user logout
+/*
+User logout
+ */
 exports.logout = {
   auth: false,
   handler: function (request, reply) {
@@ -110,7 +120,9 @@ exports.logout = {
   },
 };
 
-//renders update settings page
+/*
+Renders update settings page
+ */
 exports.viewSettings = {
   handler: function (request, reply) {
     var userEmail = request.auth.credentials.loggedInUser;
@@ -122,13 +134,13 @@ exports.viewSettings = {
   },
 };
 
-//update user settings
+/*
+Update user settings
+ */
 exports.updateSettings = {
   validate: {
 
     payload: {
-      firstName: Joi.string().required(),
-      lastName: Joi.string().required(),
       email: Joi.string().email().required(),
       password: Joi.string().required(),
     },
@@ -150,15 +162,21 @@ exports.updateSettings = {
     const loggedInUserEmail = request.auth.credentials.loggedInUser;
 
     User.findOne({ email: loggedInUserEmail }).then(user => {
-      user.firstName = editedUser.firstName;
-      user.lastName = editedUser.lastName;
+      user.firstName = user.firstName; // first not can't be changed
+      user.lastName = user.lastName;   // last name can't be changed
       user.email = editedUser.email;
       user.password = editedUser.password;
       return user.save();
+      request.cookieAuth.clear(); //clear session cookie for old user email
     }).then(user => {
+      request.cookieAuth.set({
+        loggedIn: true, // set new cookie with updated email
+        loggedInUser: user.email,
+      });
       reply.redirect('/home');
     }).catch(err => {
       reply.redirect('/');
     });
   },
+
 };

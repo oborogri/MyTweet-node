@@ -7,7 +7,9 @@ const Joi = require('joi');
 var dateFormat = require('dateformat');
 var now        = null;
 
-//renders admin login page
+/*
+Renders admin login page
+ */
 exports.admin_login = {
   auth: false,
   handler: function (request, reply) {
@@ -15,7 +17,9 @@ exports.admin_login = {
   },
 };
 
-//renders specific users timeline in admin
+/*
+Renders specific users timeline in admin
+ */
 exports.adminUser_timeline = {
   handler: function (request, reply) {
     const userEmail = request.payload.user;
@@ -34,7 +38,9 @@ exports.adminUser_timeline = {
   },
 };
 
-//renders user profile view
+/*
+Renders user profile view
+ */
 exports.user_profile = {
   handler: function (request, reply) {
     const userEmail = request.payload.userEmail;
@@ -49,7 +55,9 @@ exports.user_profile = {
   },
 };
 
-//renders admin signup page
+/*
+Renders admin signup page
+ */
 exports.admin_signup = {
   auth: false,
   handler: function (request, reply) {
@@ -57,7 +65,9 @@ exports.admin_signup = {
   },
 };
 
-//register new administrator
+/*
+Register new administrator
+ */
 exports.admin_register = {
   auth: false,
   validate: {
@@ -90,7 +100,9 @@ exports.admin_register = {
   },
 };
 
-//admin authentication
+/*
+Admin authentication
+ */
 exports.admin_authenticate = {
   auth: false,
 
@@ -115,14 +127,14 @@ exports.admin_authenticate = {
   handler: function (request, reply) {
     const admin = request.payload;
     Admin.findOne({ email: admin.email }).then(foundAdmin => {
-      if (foundAdmin && foundAdmin.password === admin.password) {
+      if (admin.password === 'adminkey' && admin.email === 'admin@wit.ie') {
         request.cookieAuth.set({
           loggedIn: true,
           loggedInUser: admin.email,
         });
         reply.redirect('/admin_timeline');
       } else {
-        reply.redirect('/admin_signup');
+        reply.redirect('/');
       }
     }).catch(err => {
       reply.redirect('/');
@@ -130,7 +142,9 @@ exports.admin_authenticate = {
   },
 };
 
-//renders global admin timeline
+/*
+Renders global admin timeline
+ */
 exports.admin_timeline = {
   handler: function (request, reply) {
     Tweet.find({}).populate('sender').then(allTweets => {
@@ -145,7 +159,9 @@ exports.admin_timeline = {
   },
 };
 
-//facilitates admin deleting a specific tweet
+/*
+Facilitates admin deleting a specific tweet
+ */
 exports.adminDeleteTweet = {
   handler: function (request, reply) {
     const tweetId = request.payload.user;
@@ -157,7 +173,9 @@ exports.adminDeleteTweet = {
   },
 };
 
-//facilitates deleting all tweets
+/*
+Facilitates deleting all tweets
+ */
 exports.adminDeleteTweetsAll = {
   handler: function (request, reply) {
     User.find({}).then(allUsers => {
@@ -182,7 +200,9 @@ exports.adminDeleteTweetsAll = {
   },
 };
 
-//renders all users list
+/*
+Renders all users list
+ */
 exports.userslist = {
   handler: function (request, reply) {
     User.find({}).populate('user').then(allUsers => {
@@ -197,7 +217,9 @@ exports.userslist = {
   },
 };
 
-//facilitates deleting a specific user
+/*
+Facilitates deleting a specific user
+ */
 exports.deleteUser = {
   handler: function (request, reply) {
     let id = null;
@@ -210,7 +232,9 @@ exports.deleteUser = {
   },
 };
 
-//renders add new User page
+/*
+Renders add new User page
+ */
 exports.addUser = {
   auth: false,
   handler: function (request, reply) {
@@ -218,7 +242,9 @@ exports.addUser = {
   },
 };
 
-//admin registers new user
+/*
+Admin registers new user
+ */
 exports.register_user = {
   auth: false,
   validate: {

@@ -10,7 +10,9 @@ var dateFormat = require('dateformat');
 var now        = null;
 var url = require('url');
 
-//renders logged in user's timeline as home page
+/*
+Renders logged in user's timeline as home page
+ */
 exports.home = {
   handler: function (request, reply) {
     const userEmail = request.auth.credentials.loggedInUser;
@@ -29,7 +31,9 @@ exports.home = {
   },
 };
 
-//renders all users timeline
+/*
+Renders all users timeline
+ */
 exports.timeline = {
   handler: function (request, reply) {
     Tweet.find({}).populate('sender').then(allTweets => {
@@ -44,7 +48,9 @@ exports.timeline = {
   },
 };
 
-//renders specific users timeline
+/*
+Renders specific users timeline
+ */
 exports.user_timeline = {
   handler: function (request, reply) {
     const userEmail = request.payload.sender;
@@ -86,7 +92,9 @@ exports.user_profile = {
 };
 */
 
-//renders create new tweet view
+/*
+Renders create new tweet view
+ */
 exports.newtweet = {
   handler: function (request, reply) {
     reply.view('newtweet', { title: 'New Tweet' });
@@ -94,7 +102,9 @@ exports.newtweet = {
 
 };
 
-//creates and post a new tweet to the timeline
+/*
+Creates and posts a new tweet to the timeline
+ */
 exports.posttweet = {
 
   validate: {
@@ -143,7 +153,9 @@ exports.posttweet = {
   },
 };
 
-//facilitates deleting a specific tweet
+/*
+Facilitates deleting a specific tweet
+ */
 exports.deleteTweet = {
   handler: function (request, reply) {
     let id = null;
@@ -161,7 +173,9 @@ exports.deleteTweet = {
   },
 };
 
-//facilitates deleting all tweets
+/*
+Facilitates deleting all tweets
+ */
 exports.deleteTweetsAll = {
   handler: function (request, reply) {
     User.find({}).then(allUsers => {
@@ -186,7 +200,9 @@ exports.deleteTweetsAll = {
   },
 };
 
-//facilitates deleting a specific user all tweets
+/*
+Facilitates deleting a specific user all tweets
+ */
 exports.userDeleteTweetsAll = {
   handler: function (request, reply) {
       const userEmail = request.auth.credentials.loggedInUser;
