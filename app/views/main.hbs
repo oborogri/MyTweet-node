@@ -1,16 +1,35 @@
 {{> welcomemenu _id="main" }}
 
 <section class="ui stacked segment">
-    <div class="ui grid">
-        <aside class="six wide column">
-            <img src="images/tweet.jpg" class="ui medium image">
-        </aside>
-        <article class="ten wide column">
-            <header class="ui  header"> Welcome to MyTweet</header>
+    <div class="ui three column grid">
+        <div class="ui four wide column">
+            <img src="images/welcome.jpg" class="ui medium image">
+        </div>
+        <div class="ui six wide column">
+            <h2> Welcome to MyTweet</h2>
             <p> Connect with your friends — and other fascinating people.<br>
                 Get in-the-moment updates on the things that interest you.<br>
                 And watch events unfold, in real time, from every angle.
             </p>
-        </article>
+        </div>
+        <div class="ui six wide column fluid form">
+            <div class="ui stacked segment">
+                <form action="/authenticate" method="POST" id="loginForm">
+                    <h5 class="ui header">Sign in</h5>
+                    <div class="field">
+                        <label>Username</label> <input placeholder="Email" type="text"
+                                                       name="email">
+                    </div>
+                    <div class="field">
+                        <label>Password</label> <input type="password" name="password">
+                    </div>
+                    <button class="ui mini grey submit button"><i class="sign in icon"></i>Sign in</button>
+                </form>
+                {{> formerror }}
+            </div>
+            <div class="ui mini message">
+                Login as administrator <a href="/admin_login"><em>here</em></a>
+            </div>
+        </div>
     </div>
 </section>

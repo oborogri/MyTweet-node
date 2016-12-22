@@ -1,19 +1,16 @@
 <section class="ui raised segment">
     <div class="ui grid">
         <asside class="six wide column">
-            <img src="images/admintimeline.jpg" class="ui medium image">
+            <img src="images/admintimeline.jpg" class="ui large image">
         </asside>
         <article class="ten wide column">
-            <h4>Timeline Total posts: {{tweets.length}}</h4>
+            <h4>All tweets: {{tweets.length}}</h4>
             <form class="ui form" action="/adminDeleteTweet" method="POST">
                 <table class="ui selectable striped table segment">
                     <thead>
                     <tr>
-                        <th>Select </th>
-                        <th>Subject</th>
-                        <th>From   </th>
-                        <th>Sent   </th>
-                        <th>Message</th>
+                        <th>Select</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -21,14 +18,37 @@
                         <tr>
                             <td>
                                 <div class="ui checkbox">
-                                    <input type="checkbox" id="checkbox" name="user" value="{{_id}}">
+                                    <input type="checkbox" id="checkbox" name="tweet" value="{{_id}}">
                                     <label></label>
                                 </div>
                             </td>
-                            <td> {{subject}}       </td>
-                            <td> {{sender.email}}  </td>
-                            <td> {{date}}          </td>
-                            <td> {{text}}          </td>
+                            <td>
+                                <div class="ui comments">
+                                    <div class="comment">
+                                        <a class="avatar">
+                                            <img src="/images/{{sender.firstName}}.jpg">
+                                            <span></span>
+                                        </a>
+                                        <div class="content">
+                                            <a class="author">
+                                                <button class="ui basic small button" id="senderEmail" formaction="/user_timeline" value="{{sender.email}}"
+                                                        name="sender"><i class="icon user"></i>{{sender.firstName}} {{sender.lastName}}
+                                                </button>
+                                            </a>
+                                            <div class="metadata">
+                                                <div class="date">{{date}}</div>
+                                                <div class="rating">
+                                                    <i class="twitter icon"></i>
+                                                    5 Following
+                                                </div>
+                                            </div>
+                                            <div class="text">
+                                                {{text}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     {{/each}}
                     </tbody>
@@ -36,11 +56,11 @@
                     <tr>
                         <th colspan="4">
                             <div class="ui buttons">
-                                <button class="ui positive button" id="delete_tweet">Delete selected
+                                <button class="ui positive button" id="delete_tweet"><i class="remove circle icon"></i>Selected
                                 </button>
                                 <div class="or"></div>
                                 <button class="ui negative button" id="delete_all" formaction="/adminDeleteTweetsAll">
-                                    <i class="remove circle icon"></i>Delete all
+                                    <i class="remove circle icon"></i>All
                                 </button>
                             </div>
                         </th>

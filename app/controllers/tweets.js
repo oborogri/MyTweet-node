@@ -8,6 +8,7 @@ const Tweet    = require('../models/tweet');
 const Joi = require('joi');
 var dateFormat = require('dateformat');
 var now        = null;
+var url = require('url');
 
 //renders logged in user's timeline as home page
 exports.home = {
@@ -62,6 +63,29 @@ exports.user_timeline = {
   },
 };
 
+/*
+Renders a specific users profile page
+ */
+/*
+exports.user_profile = {
+  handler: function (request, reply) {
+    var userEmail = request.params.id;
+    User.findOne({ email: userEmail }).then(user => {
+      const userId = user.id;
+      return Tweet.find({ sender: userId }).populate('sender');
+    }).then(allTweets => {
+      reply.view('user_timeline', {
+        title: 'User Timeline',
+        tweets: allTweets,
+        _id: 'user_timeline',
+      });
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
+*/
+
 //renders create new tweet view
 exports.newtweet = {
   handler: function (request, reply) {
@@ -77,7 +101,6 @@ exports.posttweet = {
 
     payload: {
       text: Joi.string().required(),
-      subject: Joi.required(),
     },
 
     options: {
@@ -101,12 +124,14 @@ exports.posttweet = {
     User.findOne({ email: userEmail }).then(sender => {
       const tweet = new Tweet(request.payload);
       tweet.sender = sender;
-      sender.posts += 1;
+      sender.tweets += 1;
       sender.save();
       now = new Date();
       tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');
-      if (request.payload.subject == '') {
-        tweet.subject = 'no subject';
+
+      //guard against null exception
+      if (request.payload.text == '') {
+        tweet.text = 'null';
       }
 
       return tweet.save();

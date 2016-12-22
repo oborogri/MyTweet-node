@@ -18,12 +18,14 @@ exports.main = {
 };
 
 //renders user login page
+/*
 exports.login = {
   auth: false,
   handler: function (request, reply) {
     reply.view('login', { title: 'Login to MyTweet' });
   },
 };
+*/
 
 //renders user signup page
 exports.signup = {
@@ -61,7 +63,7 @@ exports.register = {
     now = new Date();
     user.joined = dateFormat(now, 'ddd, mmm dS, yyyy');
     user.save().then(newUser => {
-      reply.redirect('/login');
+      reply.redirect('/');
     }).catch(err => {
       reply.redirect('/');
     });
@@ -80,7 +82,7 @@ exports.authenticate = {
     },
 
     failAction: function (request, reply, source, error) {
-      reply.view('login', {
+      reply.view('main', {
         title: 'Login error',
         errors: error.data.details,
       }).code(400);
@@ -100,7 +102,7 @@ exports.authenticate = {
         });
         reply.redirect('/home');
       } else {
-        reply.redirect('/signup');
+        reply.redirect('/');
       }
     }).catch(err => {
       reply.redirect('/');
@@ -163,17 +165,10 @@ exports.updateSettings = {
       user.email = editedUser.email;
       user.password = editedUser.password;
       return user.save();
-      let userId = user.id;
-      Tweet.find({ sender: userId });
-    }).then(allTweets => {
-        reply.view('user_timeline', {
-          title: 'User Timeline',
-          tweets: allTweets,
-          _id: 'user_timeline',
-        }).catch(err => {
-          reply.redirect('/');
-        });
-      });
+    }).then(user => {
+      reply.redirect('/home');
+    }).catch(err => {
+      reply.redirect('/');
+    });
   },
 };
-

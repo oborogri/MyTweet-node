@@ -53,28 +53,24 @@
     "_model": "Tweet",
     "one": {
       "text": "What are you up to?",
-      "subject": "ping",
       "date": "Wed, Nov 2nd, 2016, 9:45:03 PM",
       "sender": "->users.homer"
     },
 
     "two": {
       "text": "I'm just back from work?",
-      "subject": "pong",
       "date": "Wed, Nov 2nd, 2016, 9:49:07 PM",
       "sender": "->users.marge"
     },
 
     "three": {
       "text": "Up the Rebels!",
-      "subject": "#rebels",
       "date": "Thu, Nov 3rd, 2016, 5:45:05 PM",
       "sender": "->users.bart"
     },
 
     "four": {
       "text": "Got my tickets!!",
-      "subject": "cold play",
       "date": "Thu, Nov 3rd, 2016, 6:15:10 PM",
       "sender": "->users.lisa"
     }

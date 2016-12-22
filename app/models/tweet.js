@@ -6,7 +6,6 @@ const User = require('../models/user');
 
 const tweetSchema = mongoose.Schema({
   text:    String,
-  subject: String,
   date:    String,
 
   sender: {
