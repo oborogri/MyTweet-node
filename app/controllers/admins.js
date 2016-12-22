@@ -210,21 +210,46 @@ exports.deleteUser = {
   },
 };
 
-//facilitates deleting all users
-exports.deleteUsersAll = {
+//renders add new User page
+exports.addUser = {
+  auth: false,
   handler: function (request, reply) {
-    User.remove(function (err, p) {
-      if (err) {
-        throw err;
-      } else {
-        console.log('No Of Users deleted:' + p);
-      }
-    }).then(allTweets => {
-      reply.view('userslist', {
-        title: 'MyTweet Users',
-      });
+    reply.view('admin_new_user', { title: 'Register new user' });
+  },
+};
+
+//admin registers new user
+exports.register_user = {
+  auth: false,
+  validate: {
+
+    payload: {
+      firstName: Joi.string().required(),
+      lastName: Joi.string().required(),
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+    },
+
+    failAction: function (request, reply, source, error) {
+      reply.view('admin_new_user', {
+        title: 'Register error',
+        errors: error.data.details,
+      }).code(400);
+    },
+
+    options: {
+      abortEarly: false,
+    },
+  },
+  handler: function (request, reply) {
+    const user = new User(request.payload);
+    now = new Date();
+    user.joined = dateFormat(now, 'ddd, mmm dS, yyyy');
+    user.save().then(newUser => {
+      reply.redirect('/userslist');
     }).catch(err => {
-      reply.redirect('/');
+      reply.redirect('/admin_timeline');
     });
   },
 };
+

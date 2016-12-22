@@ -1,0 +1,11 @@
+{{> adminmenu _id='admin_new_user'}}
+
+<section class="ui raised segment">
+    {{> signup }}
+
+    <script>
+        document.getElementById("registerButton").setAttribute('formaction', '/admin_register');
+    </script>
+    <div class="ui  divider"></div>
+
+</section>

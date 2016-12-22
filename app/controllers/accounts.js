@@ -17,16 +17,6 @@ exports.main = {
   },
 };
 
-//renders user login page
-/*
-exports.login = {
-  auth: false,
-  handler: function (request, reply) {
-    reply.view('login', { title: 'Login to MyTweet' });
-  },
-};
-*/
-
 //renders user signup page
 exports.signup = {
   auth: false,
