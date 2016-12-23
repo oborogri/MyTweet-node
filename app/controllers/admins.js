@@ -279,3 +279,16 @@ exports.register_user = {
   },
 };
 
+/*
+ Renders social graph page
+ */
+exports.social_graph = {
+  handler: function (request, reply) {
+    User.find({}).then(allUsers => {
+      reply.view('social_graph', { title: 'MyTweet Social graph', users: allUsers });
+    }).catch(err => {
+      reply.redirect('/admin_timeline');
+    });
+  },
+};
+
