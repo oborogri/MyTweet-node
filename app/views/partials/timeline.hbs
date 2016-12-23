@@ -30,11 +30,9 @@
                                             <span></span>
                                         </a>
                                         <div class="content">
-                                            <a class="author">
-                                                <button class="ui basic tiny button" id="senderName" formaction="/user_timeline" value="{{sender.email}}"
-                                                        name="sender"><i class="icon user"></i>{{sender.firstName}} {{sender.lastName}}
-                                                </button>
-                                            </a>
+                                            <div class="author">
+                                                @{{sender.firstName}} {{sender.lastName}}
+                                            </div>
                                             <div class="metadata">
                                                 <div class="date">{{date}}</div>
                                                 <div class="rating">

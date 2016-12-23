@@ -22,7 +22,7 @@ Renders specific users timeline in admin
  */
 exports.adminUser_timeline = {
   handler: function (request, reply) {
-    const userEmail = request.payload.user;
+    const userEmail = request.payload.sender;
     User.findOne({ email: userEmail }).then(user => {
       const userId = user.id;
       return Tweet.find({ sender: userId }).populate('sender');
@@ -43,8 +43,8 @@ Renders user profile view
  */
 exports.user_profile = {
   handler: function (request, reply) {
-    const userEmail = request.payload.userEmail;
-    User.findOne({ email: userEmail }).then(user => {
+    const foundEmail = request.payload.userEmail;
+    User.findOne({ email: foundEmail }).then(user => {
       reply.view('user_profile',
           { title: 'User Profile',
             user: user,
@@ -164,7 +164,7 @@ Facilitates admin deleting a specific tweet
  */
 exports.adminDeleteTweet = {
   handler: function (request, reply) {
-    const tweetId = request.payload.user;
+    const tweetId = request.payload.tweet;
     Tweet.remove({ _id: { $in: tweetId } }).then(allTweets => {
       reply.redirect('/admin_timeline');
     }).catch(err => {
@@ -180,9 +180,9 @@ exports.adminDeleteTweetsAll = {
   handler: function (request, reply) {
     User.find({}).then(allUsers => {
       allUsers.forEach(user => {
-        user.posts = 0;
+        user.tweets = 0;
       });
-      return user.save();
+      return;
     });
     Tweet.remove(function (err, p) {
       if (err) {
@@ -192,7 +192,7 @@ exports.adminDeleteTweetsAll = {
       }
     }).then(allTweets => {
       reply.view('admin_timeline', {
-        title: 'MyTweet Timeline',
+        title: 'MyTweet admin Timeline',
       });
     }).catch(err => {
       reply.redirect('/');
@@ -205,7 +205,7 @@ Renders all users list
  */
 exports.userslist = {
   handler: function (request, reply) {
-    User.find({}).populate('user').then(allUsers => {
+    User.find({}).then(allUsers => {
       reply.view('userslist', {
         title: 'MyTweet Users',
         users: allUsers,
@@ -218,16 +218,20 @@ exports.userslist = {
 };
 
 /*
-Facilitates deleting a specific user
+Facilitates deleting a specific user and their tweets
  */
 exports.deleteUser = {
   handler: function (request, reply) {
-    let id = null;
-    id = request.payload.user;
-    User.remove({ _id: { $in: id } }).then(newUser => {
-      reply.redirect('/userslist');
+    let id = request.payload.userId;
+    User.findOne({ _id: { $in: id } }).then(foundUser => {
+      let userId = foundUser.id;
+      Tweet.remove({ sender: userId }).then(response => {
+        User.remove({ _id: { $in: id } }).then(response => {
+          reply.redirect('/userslist');
+        });
+      });
     }).catch(err => {
-      reply.redirect('/');
+      reply.redirect('/userslist');
     });
   },
 };

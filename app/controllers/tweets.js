@@ -32,9 +32,9 @@ exports.home = {
 };
 
 /*
-Renders all users timeline
+Renders all global timeline
  */
-exports.timeline = {
+exports.global_timeline = {
   handler: function (request, reply) {
     Tweet.find({}).populate('sender').then(allTweets => {
         reply.view('users_timeline', {
@@ -161,7 +161,7 @@ exports.deleteTweet = {
     let id = null;
     const userEmail = request.auth.credentials.loggedInUser;
     User.findOne({ email: userEmail }).then(sender => {
-      sender.posts -= 1;
+      sender.tweets -= 1;
       return sender.save();
     });
     id = request.payload.tweet;
@@ -180,7 +180,7 @@ exports.deleteTweetsAll = {
   handler: function (request, reply) {
     User.find({}).then(allUsers => {
       allUsers.forEach(user => {
-        user.posts = 0;
+        user.tweets = 0;
       });
       return user.save();
     });

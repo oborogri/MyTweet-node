@@ -6,15 +6,15 @@
                 <img src="/images/{{user.firstName}}.jpg">
             </div>
             <div class="content">
-                <button class="ui button" name="user" value="{{user.email}}">{{user.firstName}}</button>
+                <button class="ui basic tiny button" value="{{user.email}}" id="senderEmail" formaction="/adminUser_timeline" value="{{sender.email}}"
+                        name="sender">{{user.firstName}} {{user.lastName}}</button>
                 <div class="meta">
                     <span class="date">Joined: {{user.joined}}</span>
                 </div>
             </div>
             <div class="extra content">
-                <a>
-                    <i class="twitter icon"></i>
-                    {{user.tweets}} Posts
+                <a>{{user.posts}} Posts
+                    <i class="twitter icon"></i>  {{user.followers}} Followers
                 </a>
             </div>
         </div>

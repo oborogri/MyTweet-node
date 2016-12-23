@@ -22,14 +22,14 @@
                     <tr>
                         <td>
                             <div class="ui checkbox">
-                                <input type="checkbox" id="usercheckbox" name="user" value="{{_id}}">
+                                <input type="checkbox" id="usercheckbox" name="userId" value="{{_id}}">
                                 <label></label>
                             </div>
                         </td>
                         <td> {{firstName}} </td>
                         <td> {{lastName}}  </td>
-                        <td><button class="ui small button" name="userEmail" formaction="/user_profile" value="{{email}}"
-                                    name="user">{{email}}</button></td>
+                        <td><button class="ui basic small button" name="userEmail" formaction="/user_profile" value="{{email}}"
+                                    name="user"><i class="info circle icon"></i>{{email}}</button></td>
                         <td> {{joined}}   </td>
                         <td> {{tweets}}    </td>
                     </tr>
@@ -39,11 +39,11 @@
                 <tr>
                     <th colspan="4">
                         <div class="ui buttons">
-                            <button class="ui negative button" id="delete_user"><i class="remove user icon"></i>Remove
+                            <button class="ui negative button" id="delete_user"><i class="remove user icon"></i>Delete
                             </button>
                             <div class="or"></div>
                             <button class="ui positive button" id="add_user" formaction="/addUser">
-                                <i class="add user icon"></i> Add new user
+                                <i class="add user icon"></i> Register new
                             </button>
                         </div>
                     </th>

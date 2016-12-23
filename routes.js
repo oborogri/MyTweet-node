@@ -18,10 +18,10 @@ module.exports = [
   { method: 'GET', path: '/settings',         config: Accounts.viewSettings },
   { method: 'POST', path: '/update_settings', config: Accounts.updateSettings },
 
-  { method: 'GET', path: '/home',           config: Tweets.home },
-  { method: 'GET', path: '/timeline',       config: Tweets.timeline },
-  { method: 'GET', path: '/newtweet',       config: Tweets.newtweet },
-  { method: 'POST', path: '/user_timeline', config: Tweets.user_timeline },
+  { method: 'GET', path: '/home',            config: Tweets.home },
+  { method: 'GET', path: '/global_timeline', config: Tweets.global_timeline },
+  { method: 'GET', path: '/newtweet',        config: Tweets.newtweet },
+  { method: 'POST', path: '/user_timeline',  config: Tweets.user_timeline },
 
   { method: 'POST', path: '/posttweet',           config: Tweets.posttweet },
   { method: 'POST', path: '/deleteTweetsAll',     config: Tweets.deleteTweetsAll },
@@ -32,6 +32,7 @@ module.exports = [
   { method: 'GET', path: '/admin_signup',         config: Admins.admin_signup },
   { method: 'GET', path: '/admin_login',          config: Admins.admin_login },
   { method: 'GET', path: '/userslist',            config: Admins.userslist },
+  { method: 'GET', path: '/user_profile',         config: Admins.user_profile },
   { method: 'GET', path: '/social_graph',         config: Admins.social_graph },
 
   { method: 'POST', path: '/adminUser_timeline',  config: Admins.adminUser_timeline },
