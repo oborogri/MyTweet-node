@@ -134,7 +134,7 @@ exports.posttweet = {
     User.findOne({ email: userEmail }).then(sender => {
       const tweet = new Tweet(request.payload);
       tweet.sender = sender;
-      sender.tweets += 1;
+      sender.posts += 1;
       sender.save();
       now = new Date();
       tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');

@@ -5,6 +5,7 @@ const Assets = require('./app/controllers/assets');
 const Accounts = require('./app/controllers/accounts');
 const Tweets = require('./app/controllers/tweets');
 const Admins = require('./app/controllers/admins');
+const Friendships = require('./app/controllers/friendships');
 
 module.exports = [
 
@@ -44,6 +45,8 @@ module.exports = [
   { method: 'POST', path: '/deleteUser',           config: Admins.deleteUser },
   { method: 'POST', path: '/addUser',              config: Admins.addUser },
   { method: 'POST', path: '/admin_register',       config: Admins.register_user },
+
+  { method: 'POST', path: '/follow',               config: Friendships.follow },
 
   {
     method: 'GET',

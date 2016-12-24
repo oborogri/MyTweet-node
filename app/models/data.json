@@ -8,7 +8,9 @@
       "email": "homer@simpson.com",
       "password": "secret",
       "joined": "Wed, Nov 2nd, 2016",
-      "posts": 4
+      "posts": 4,
+      "followers": 4,
+      "following": 1
     },
 
     "marge": {
@@ -17,7 +19,9 @@
       "email": "marge@simpson.com",
       "password": "secret",
       "joined": "Wed, Nov 2nd, 2016",
-      "posts": 2
+      "posts": 2,
+      "followers": 2,
+      "following": 2
     },
 
     "bart": {
@@ -26,7 +30,9 @@
       "email": "bart@simpson.com",
       "password": "secret",
       "joined": "Thu, Nov 3rd, 2016",
-      "posts": 1
+      "posts": 1,
+      "followers": 1,
+      "following": 2
     },
 
     "lisa": {
@@ -35,7 +41,9 @@
       "email": "lisa@simpson.com",
       "password": "secret",
       "joined": "Thu, Nov 3rd, 2016",
-      "posts": 1
+      "posts": 1,
+      "followers": 3,
+      "following": 0
     }
   },
 
