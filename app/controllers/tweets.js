@@ -16,6 +16,36 @@ Renders logged in user's timeline as home page
 exports.home = {
   handler: function (request, reply) {
     const userEmail = request.auth.credentials.loggedInUser;
+    User.findOne({ email: userEmail }).then(user => {
+      var tweetList = user.posts;//getting posts list from db
+      const userId = user.id;
+      return User.find({ followedBy: userId }).then(allUsers => {
+        var followersId = [];
+        allUsers.forEach(foundUser => {
+          const foundUserId = foundUser.id;
+          followersId.push(userId);//adding loggedInUser id to the array of ids
+          followersId.push(foundUserId);//adding friend id to all the array of ids
+        });
+
+        Tweet.find({ sender: { $in: [followersId] } }).populate('sender').then(allTweets => {
+          sender.save();
+        });
+        reply.view('home', {
+          title: 'MyTweet Home',
+          tweets: tweetList,
+          id: 'home',
+        });
+      }).catch(err => {
+        reply.redirect('/');
+      });
+    });
+  },
+};
+
+/*
+exports.home = {
+  handler: function (request, reply) {
+    const userEmail = request.auth.credentials.loggedInUser;
     User.findOne({ email: userEmail }).populate('posts').then(user => {
       var tweetList = user.posts;//getting posts list from db
       const userId = user.id;
@@ -38,6 +68,7 @@ exports.home = {
     });
   },
 };
+*/
 
 /*
 exports.home = {
@@ -60,7 +91,7 @@ exports.home = {
 */
 
 /*
-Renders all global timeline
+Renders all users timeline
  */
 exports.global_timeline = {
   handler: function (request, reply) {
@@ -136,7 +167,7 @@ exports.posttweet = {
   },
   handler: function (request, reply) {
     const userEmail = request.auth.credentials.loggedInUser;
-    User.findOne({ email: userEmail }).then(sender => {
+    User.findOne({ email: userEmail }).populate('posts').then(sender => {
       var userTweets = sender.posts;
       const tweet = new Tweet(request.payload);
       tweet.sender = sender;
@@ -151,7 +182,7 @@ exports.posttweet = {
       userTweets.push(tweet);
       sender.save();
       return tweet.save();
-    }).then(newTweet => {
+    }).then(NewTweet => {
       reply.redirect('/home');
     }).catch(err => {
       reply.redirect('/');
