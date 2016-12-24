@@ -18,7 +18,7 @@
             data.addColumn('number', 'Followers');
             data.addRows([
     {{#each users}}
-                ['{{firstName}}', {{posts}}, {{followers}}],
+                ['{{firstName}}', {{posts.length}}, {{followedBy.length}}],
     {{/each}}
             ]);
 

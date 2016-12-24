@@ -44,7 +44,7 @@ Renders user profile view
 exports.user_profile = {
   handler: function (request, reply) {
     const foundEmail = request.payload.userEmail;
-    User.findOne({ email: foundEmail }).then(user => {
+    User.findOne({ email: foundEmail }).populate('posts').then(user => {
       reply.view('user_profile',
           { title: 'User Profile',
             user: user,

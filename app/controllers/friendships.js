@@ -1,52 +1,32 @@
 'use strict';
 
 const User = require('../models/user');
-const Friendship = require('../models/friendship');
 const Joi = require('joi');
 
 exports.follow = {
-
   handler: function (request, reply) {
     var userEmail = request.auth.credentials.loggedInUser;
-    let friendship = new Friendship();
     User.findOne({ email: userEmail }).then(sourceUser => {
-      friendship.sourceUser = sourceUser.id;
-      sourceUser.following += 1;
-      sourceUser.save();
-      friendship.save();
-      let target = request.payload.targetUser;
-      return User.findOne({ _id: { $in: target } }).then(targetUser => {
-        friendship.targetUser = targetUser.id;
-        targetUser.followers += 1;
-        targetUser.save();
-        return friendship.save();
+      var sourceUserFollowing = sourceUser.following;
+      var target = request.payload.targetUser;
+      User.findOne({ _id: { $in: target } }).then(targetUser => {
+        var targetUserFollowedBy = targetUser.followedBy;
+
+        //check if user trying to follow themselves or an existing friend
+        if ((sourceUser.id !== targetUser.id) && (sourceUserFollowing.indexOf(targetUser.id) === -1)) {
+          sourceUserFollowing.push(targetUser.id);//add target user to following array
+          targetUserFollowedBy.push(sourceUser.id);//add source user to followedBy array
+        } else {
+          console.log('Already following this user');
+        }
+
+        sourceUser.save();
+        return targetUser.save();
       }).then(response => {
         reply.redirect('/home');
       }).catch(err => {
         reply.redirect('/home');
       });
-    });
-  },
-};
-
-exports.report = {
-  auth: {
-    strategy: 'jwt',
-  },
-  handler: function (request, reply) {
-    Donation.find({}).populate('donor').populate('candidate').then(allDonations => {
-      let total = 0;
-      allDonations.forEach(donation => {
-        total += donation.amount;
-      });
-
-      reply.view('report', {
-        title: 'Donations to Date',
-        donations: allDonations,
-        total: total,
-      });
-    }).catch(err => {
-      reply.redirect('/');
     });
   },
 };

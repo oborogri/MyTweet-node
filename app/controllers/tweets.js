@@ -16,13 +16,40 @@ Renders logged in user's timeline as home page
 exports.home = {
   handler: function (request, reply) {
     const userEmail = request.auth.credentials.loggedInUser;
-    User.findOne({ email: userEmail }).then(user => {
+    User.findOne({ email: userEmail }).populate('posts').then(user => {
+      var tweetList = user.posts;//getting posts list from db
       const userId = user.id;
-      return Tweet.find({ sender: userId }).populate('sender');
-    }).then(allTweets => {
+      User.find({ followedBy: userId }).populate('posts').then(allUsers => {
+        allUsers.forEach(foundUser => {
+          let foundUserId = foundUser.id;
+          Tweet.find({ sender: foundUserId }).populate('sender').then(allTweets => {
+            Array.prototype.push.apply(tweetList, allTweets);//adding friends tweets to posts list
+            return user.save();
+          });
+        });
+      });
       reply.view('home', {
         title: 'MyTweet Home',
-        tweets: allTweets,
+        tweets: tweetList,
+        id: 'home',
+      });
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
+
+/*
+exports.home = {
+  handler: function (request, reply) {
+    const userEmail = request.auth.credentials.loggedInUser;
+    User.findOne({ email: userEmail }).then(user => {
+      const userId = user.id;
+      return Friendship.find({ sourceUser: userId }).populate('sourceUser').populate('targetUser');
+    }).then(allFriendships => {
+      reply.view('home', {
+        title: 'MyTweet Home',
+        friendships: allFriendships,
         _id: 'home',
       });
     }).catch(err => {
@@ -30,6 +57,7 @@ exports.home = {
     });
   },
 };
+*/
 
 /*
 Renders all global timeline
@@ -68,29 +96,6 @@ exports.user_timeline = {
     });
   },
 };
-
-/*
-Renders a specific users profile page
- */
-/*
-exports.user_profile = {
-  handler: function (request, reply) {
-    var userEmail = request.params.id;
-    User.findOne({ email: userEmail }).then(user => {
-      const userId = user.id;
-      return Tweet.find({ sender: userId }).populate('sender');
-    }).then(allTweets => {
-      reply.view('user_timeline', {
-        title: 'User Timeline',
-        tweets: allTweets,
-        _id: 'user_timeline',
-      });
-    }).catch(err => {
-      reply.redirect('/');
-    });
-  },
-};
-*/
 
 /*
 Renders create new tweet view
@@ -132,10 +137,9 @@ exports.posttweet = {
   handler: function (request, reply) {
     const userEmail = request.auth.credentials.loggedInUser;
     User.findOne({ email: userEmail }).then(sender => {
+      var userTweets = sender.posts;
       const tweet = new Tweet(request.payload);
       tweet.sender = sender;
-      sender.posts += 1;
-      sender.save();
       now = new Date();
       tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');
 
@@ -144,6 +148,8 @@ exports.posttweet = {
         tweet.text = 'null';
       }
 
+      userTweets.push(tweet);
+      sender.save();
       return tweet.save();
     }).then(newTweet => {
       reply.redirect('/home');
