@@ -288,7 +288,7 @@ exports.register_user = {
  */
 exports.social_graph = {
   handler: function (request, reply) {
-    User.find({}).then(allUsers => {
+    User.find({}).populate('posts').populate('followedBy').then(allUsers => {
       reply.view('social_graph', { title: 'MyTweet Social graph', users: allUsers });
     }).catch(err => {
       reply.redirect('/admin_timeline');

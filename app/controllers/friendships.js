@@ -5,28 +5,30 @@ const Joi = require('joi');
 
 exports.follow = {
   handler: function (request, reply) {
-    var userEmail = request.auth.credentials.loggedInUser;
+    let sourceUserFollowing = [];
+    let targetUserFollowedBy = [];
+    const userEmail = request.auth.credentials.loggedInUser;
     User.findOne({ email: userEmail }).then(sourceUser => {
-      var sourceUserFollowing = sourceUser.following;
-      var target = request.payload.targetUser;
-      User.findOne({ _id: { $in: target } }).then(targetUser => {
-        var targetUserFollowedBy = targetUser.followedBy;
+        sourceUserFollowing = sourceUser.following;
+        const sourceUserId = sourceUser.id;
+        const targetUserId = request.payload.targetUser;
+        if ((sourceUserId != targetUserId) && (sourceUserFollowing.indexOf(targetUserId) != -1)) {
+          sourceUserFollowing.push(targetUserId);//add target user to following array
 
-        //check if user trying to follow themselves or an existing friend
-        if ((sourceUser.id !== targetUser.id) && (sourceUserFollowing.indexOf(targetUser.id) === -1)) {
-          sourceUserFollowing.push(targetUser.id);//add target user to following array
-          targetUserFollowedBy.push(sourceUser.id);//add source user to followedBy array
+          User.findOne({ _id: { $in: targetUser } }).then(targetUser => {
+            targetUserFollowedBy = targetUser.followedBy;
+            targetUserFollowedBy.push(sourceUser.id);//add source user to followedBy array
+            return targetUser.save();
+          });
         } else {
           console.log('Already following this user');
         }
 
-        sourceUser.save();
-        return targetUser.save();
+        return sourceUser.save();
       }).then(response => {
         reply.redirect('/home');
       }).catch(err => {
         reply.redirect('/home');
       });
-    });
   },
 };

@@ -11,6 +11,7 @@ const userSchema = mongoose.Schema({
   email: String,
   password: String,
   joined: String,
+  followingPosts: [],
   posts: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Tweet',

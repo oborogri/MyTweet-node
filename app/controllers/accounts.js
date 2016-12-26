@@ -91,15 +91,17 @@ exports.authenticate = {
     },
   },
   handler: function (request, reply) {
-    const user = request.payload;
-    User.findOne({ email: user.email }).then(foundUser => {
-      if (foundUser && foundUser.password === user.password) {
+    const userEmail = request.payload.email;
+    const userPassword = request.payload.password;
+    User.findOne({ email: userEmail }).then(foundUser => {
+      if ((foundUser.email === userEmail) && (foundUser.password === userPassword)) {
         request.cookieAuth.set({
           loggedIn: true,
-          loggedInUser: user.email,
+          loggedInUser: userEmail,
         });
         reply.redirect('/home');
       } else {
+        console.log('Not a valid user!');
         reply.redirect('/');
       }
     }).catch(err => {
@@ -162,11 +164,9 @@ exports.updateSettings = {
     const loggedInUserEmail = request.auth.credentials.loggedInUser;
 
     User.findOne({ email: loggedInUserEmail }).then(user => {
-      user.firstName = user.firstName; // first not can't be changed
-      user.lastName = user.lastName;   // last name can't be changed
       user.email = editedUser.email;
       user.password = editedUser.password;
-      return user.save();
+      user.save();
       request.cookieAuth.clear(); //clear session cookie for old user email
     }).then(user => {
       request.cookieAuth.set({
