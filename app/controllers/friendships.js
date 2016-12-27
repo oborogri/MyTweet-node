@@ -5,11 +5,10 @@ const Joi = require('joi');
 
 exports.follow = {
   handler: function (request, reply) {
-    let sourceUserFollowing = [];
     let targetUserFollowedBy = [];
     const userEmail = request.auth.credentials.loggedInUser;
     User.findOne({ email: userEmail }).then(sourceUser => {
-        sourceUserFollowing = sourceUser.following;
+        let sourceUserFollowing = sourceUser.following;
         const sourceUserId = sourceUser.id;
         const targetUserId = request.payload.targetUser;
         if ((sourceUserId !== targetUserId) && (sourceUserFollowing.indexOf(targetUserId) === -1)) {

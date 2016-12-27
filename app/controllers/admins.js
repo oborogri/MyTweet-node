@@ -44,7 +44,7 @@ Renders user profile view
 exports.user_profile = {
   handler: function (request, reply) {
     const foundEmail = request.payload.userEmail;
-    User.findOne({ email: foundEmail }).populate('posts').then(user => {
+    User.findOne({ email: foundEmail }).populate('followedBy').then(user => {
       reply.view('user_profile',
           { title: 'User Profile',
             user: user,
@@ -164,8 +164,14 @@ Facilitates admin deleting a specific tweet
  */
 exports.adminDeleteTweet = {
   handler: function (request, reply) {
-    const tweetId = request.payload.tweet;
-    Tweet.remove({ _id: { $in: tweetId } }).then(allTweets => {
+    let tweetsId = request.payload.tweet;//selection may contain multiple tweets id
+    const tweetId = tweetsId[0];//selecting first id as belong to same sender
+    User.findOne({ posts: tweetId }).then(foundUser => {
+      let tweetsId = request.payload.tweet;
+      let userTweets = foundUser.posts;
+      userTweets.remove(tweetId in tweetsId);
+      return Tweet.remove({ _id: { $in: tweetsId } });
+    }).then(response => {
       reply.redirect('/admin_timeline');
     }).catch(err => {
       reply.redirect('/');
@@ -178,20 +184,14 @@ Facilitates deleting all tweets
  */
 exports.adminDeleteTweetsAll = {
   handler: function (request, reply) {
-    User.find({}).then(allUsers => {
-      allUsers.forEach(user => {
-        user.tweets = 0;
+    User.find({}).then(usersAll => {
+      usersAll.forEach(user => {//clearing each users posts list
+        user.posts = [];
+        user.save();
       });
-      return;
-    });
-    Tweet.remove(function (err, p) {
-      if (err) {
-        throw err;
-      } else {
-        console.log('No Of Tweets deleted:' + p);
-      }
-    }).then(allTweets => {
-      reply.view('admin_timeline', {
+      return Tweet.remove({});//deleting tweets from db
+    }).then(response => {
+      reply.redirect('/admin_timeline', {
         title: 'MyTweet admin Timeline',
       });
     }).catch(err => {
@@ -225,12 +225,12 @@ exports.deleteUser = {
     let id = request.payload.userId;
     User.findOne({ _id: { $in: id } }).then(foundUser => {
       let userId = foundUser.id;
-      Tweet.remove({ sender: userId }).then(response => {
-        User.remove({ _id: { $in: id } }).then(response => {
+      return Tweet.remove({ sender: userId });
+    }).then(response => {
+        User.remove({ _id: id }).then(response => {
           reply.redirect('/userslist');
         });
-      });
-    }).catch(err => {
+      }).catch(err => {
       reply.redirect('/userslist');
     });
   },
@@ -288,11 +288,21 @@ exports.register_user = {
  */
 exports.social_graph = {
   handler: function (request, reply) {
-    User.find({}).populate('posts').populate('followedBy').then(allUsers => {
+    User.find({}).populate('followedBy').then(allUsers => {
       reply.view('social_graph', { title: 'MyTweet Social graph', users: allUsers });
     }).catch(err => {
       reply.redirect('/admin_timeline');
     });
   },
 };
+
+/*exports.social_graph = {
+  handler: function (request, reply) {
+    User.find({}).populate('posts').populate('followedBy').then(allUsers => {
+      reply.view('social_graph', { title: 'MyTweet Social graph', users: allUsers });
+    }).catch(err => {
+      reply.redirect('/admin_timeline');
+    });
+  },
+};*/
 
