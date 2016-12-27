@@ -119,22 +119,17 @@ exports.posttweet = {
   },
   handler: function (request, reply) {
     const userEmail = request.auth.credentials.loggedInUser;
-    User.findOne({ email: userEmail }).then(sender => {
-      let userPosts = [];
-      userPosts = sender.posts;
-      const tweet = new Tweet(request.payload);
-      tweet.sender = sender.id;
-      now = new Date();
-      tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');
+    let tweet = new Tweet(request.payload);
+    now = new Date();
+    tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');
 
-      //guard against null exception
-      if (request.payload.text == '') {
-        tweet.text = 'null';
-      }
-
+    User.findOne({ email: userEmail }).then(foundUser=> {
+      const senderId = foundUser.id;
+      let userTweets = foundUser.posts;
+      userTweets.push(tweet);
+      tweet.sender = senderId;
       tweet.save();
-      userPosts.push(tweet.id);
-      return sender.save();
+      return foundUser.save();
     }).then(NewTweet => {
       reply.redirect('/home');
     }).catch(err => {
@@ -147,47 +142,8 @@ exports.posttweet = {
  Facilitates deleting a specific tweet
  */
 exports.deleteTweet = {
-  handler: function (request, reply) {
-    const tweetId = request.payload.tweet;//payload may contain multiple tweets
-    const userEmail = request.auth.credentials.loggedInUser;
-    User.findOne({ email: userEmail }).then(foundUser => {
-      let userTweets = foundUser.posts;
-      tweetId.forEach(tweet => {//loop through selected tweets and
-        userTweets.remove(tweet);//remove each selected tweet from users posts
-        foundUser.save();
-      });
-      return Tweet.remove({ _id: { $in: tweetId } });
-    }).then(response => {
-      reply.redirect('/home');
-    }).catch(err => {
-      reply.redirect('/');
-    });
-  },
+  handler: function (request, reply) {},
 };
-
-/*/!*
- Facilitates deleting a specific tweet from home timeline
- *!/
-exports.deleteHomeTweet = {
-  handler: function (request, reply) {
-    const userEmail = request.auth.credentials.loggedInUser;
-    User.findOne({ email: userEmail }).then(sender => {
-      let userTweets = sender.posts;
-      let tweetsId = request.payload.tweet;
-      return tweetsId.forEach(tweetId => {
-        const foundUserId = foundUser.id;
-        usersIdList.push(foundUserId);//store all user Ids in an array
-      });
-    }).then(response => {
-      let tweetsId = request.payload.tweet;
-      return Tweet.remove({ _id: { $in: tweetsId } });
-    }).then(response => {
-      reply.redirect('/home');
-    }).catch(err => {
-      reply.redirect('/');
-    });
-  },
-};*/
 
 /*
 Facilitates deleting all tweets

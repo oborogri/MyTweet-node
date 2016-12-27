@@ -165,14 +165,16 @@ Facilitates admin deleting a specific tweet
 exports.adminDeleteTweet = {
   handler: function (request, reply) {
     let tweetsId = request.payload.tweet;//selection may contain multiple tweets id
-    const tweetId = tweetsId[0];//selecting any id as they belong to same sender
-    User.findOne({ posts: tweetId }).then(foundUser => {
-      let tweetsId = request.payload.tweet;
-      let userTweets = foundUser.posts;
-      tweetsId.forEach(tweet => {//looping through selected tweets and
-        userTweets.remove(tweet);//delete each selected tweet from users posts list
+    User.find({ $or: [{ posts: { _id: { $in: tweetsId } } }, { tweetsId }] }).then(allUsers => {
+      allUsers.forEach(user => {//looping through all users
+        tweetsId.forEach(tweetId => {//looping through selected tweets
+          for (var i = 0; i < user.posts.length; i++) {
+            user.posts.remove(tweetId);//delete each selected tweet from each users posts list
+            user.save();
+          }
+        });
       });
-      return Tweet.remove({ _id: { $in: tweetsId } });//delete all selected tweets from db
+      return Tweet.remove({ _id: { $in: tweetsId } });//delete all selected tweets from db*/
     }).then(response => {
       reply.redirect('/admin_timeline');
     }).catch(err => {
@@ -180,6 +182,15 @@ exports.adminDeleteTweet = {
     });
   },
 };
+
+/*User.find({ _id: { $in: usersId } }).then(foundUsers => {
+      let tweetsId = request.payload.tweet;
+      let userTweets = foundUser.posts;
+      tweetsId.forEach(tweet => {//looping through selected tweets and
+        userTweets.remove(tweet);//delete each selected tweet from users posts list
+      });
+      return Tweet.remove({ _id: { $in: tweetsId } });//delete all selected tweets from db*/
+
 
 /*
 Facilitates deleting all tweets
