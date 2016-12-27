@@ -165,12 +165,14 @@ Facilitates admin deleting a specific tweet
 exports.adminDeleteTweet = {
   handler: function (request, reply) {
     let tweetsId = request.payload.tweet;//selection may contain multiple tweets id
-    const tweetId = tweetsId[0];//selecting first id as belong to same sender
+    const tweetId = tweetsId[0];//selecting any id as they belong to same sender
     User.findOne({ posts: tweetId }).then(foundUser => {
       let tweetsId = request.payload.tweet;
       let userTweets = foundUser.posts;
-      userTweets.remove(tweetId in tweetsId);
-      return Tweet.remove({ _id: { $in: tweetsId } });
+      tweetsId.forEach(tweet => {//looping through selected tweets and
+        userTweets.remove(tweet);//delete each selected tweet from users posts list
+      });
+      return Tweet.remove({ _id: { $in: tweetsId } });//delete all selected tweets from db
     }).then(response => {
       reply.redirect('/admin_timeline');
     }).catch(err => {
@@ -222,15 +224,13 @@ Facilitates deleting a specific user and their tweets
  */
 exports.deleteUser = {
   handler: function (request, reply) {
-    let id = request.payload.userId;
-    User.findOne({ _id: { $in: id } }).then(foundUser => {
-      let userId = foundUser.id;
-      return Tweet.remove({ sender: userId });
+    let userId = request.payload.userId;
+    Tweet.remove({ sender: { $in: userId } }).then(response => {
+      console.log('User removed');
+      return User.remove({ _id: { $in: userId } });
     }).then(response => {
-        User.remove({ _id: id }).then(response => {
           reply.redirect('/userslist');
-        });
-      }).catch(err => {
+        }).catch(err => {
       reply.redirect('/userslist');
     });
   },
@@ -295,14 +295,3 @@ exports.social_graph = {
     });
   },
 };
-
-/*exports.social_graph = {
-  handler: function (request, reply) {
-    User.find({}).populate('posts').populate('followedBy').then(allUsers => {
-      reply.view('social_graph', { title: 'MyTweet Social graph', users: allUsers });
-    }).catch(err => {
-      reply.redirect('/admin_timeline');
-    });
-  },
-};*/
-
