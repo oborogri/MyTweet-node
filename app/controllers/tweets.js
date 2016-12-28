@@ -18,7 +18,6 @@ exports.home = {
     const userEmail = request.auth.credentials.loggedInUser;
     User.findOne({ email: userEmail }).then(user => {
       const userId = user.id;//finds loggedInUser id
-      let homeTweets = user.followingPosts;
       return User.find({ $or: [{ _id: userId }, { followedBy: userId }] });//finds user and their friends
     }).then(allUsers => {
       let usersIdList = [];
@@ -117,19 +116,24 @@ exports.posttweet = {
       });
     },
   },
+
   handler: function (request, reply) {
     const userEmail = request.auth.credentials.loggedInUser;
     let tweet = new Tweet(request.payload);
     now = new Date();
     tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');
 
+    //guard against null exception
+    if (request.payload.text == '') {
+      tweet.text = 'null';
+    }
+
     User.findOne({ email: userEmail }).then(foundUser=> {
-      const senderId = foundUser.id;
       let userTweets = foundUser.posts;
-      userTweets.push(tweet);
-      tweet.sender = senderId;
+      userTweets.push(tweet);//add tweet object to users posts list
+      foundUser.save();
+      tweet.sender = foundUser.id;
       tweet.save();
-      return foundUser.save();
     }).then(NewTweet => {
       reply.redirect('/home');
     }).catch(err => {
@@ -142,24 +146,29 @@ exports.posttweet = {
  Facilitates deleting a specific tweet
  */
 exports.deleteTweet = {
-  handler: function (request, reply) {},
-};
-
-/*
-Facilitates deleting all tweets
- */
-exports.deleteTweetsAll = {
   handler: function (request, reply) {
-    Tweet.remove(function (err, p) {
-      if (err) {
-        throw err;
-      } else {
-        console.log('No Of Tweets deleted:' + p);
-      }
-    }).then(allTweets => {
-      reply.view('home', {
-        title: 'MyTweet Timeline',
+    const tweetId = request.payload.tweet;//payload may contain multiple tweets
+    let selectedTweets = [];
+    if (typeof tweetId === 'object') {//payload contains an array of tweets ids
+      selectedTweets.push.apply(selectedTweets, tweetId);
+    } else {//payload contains just a single tweet id
+      selectedTweets.push(tweetId);//insert payload into a new array
+    }
+
+    const userEmail = request.auth.credentials.loggedInUser;
+    User.findOne({ email: userEmail }).then(foundUser => {
+      let userTweets = foundUser.posts;
+      selectedTweets.forEach(tweet => {//looping through the payload ids
+        for (var i = 0; i < userTweets.length; i++) {
+          if (userTweets[i] == tweet) {
+            userTweets.splice(i, 1);//deleting selected ids from user's posts list
+          }
+        }
       });
+      foundUser.save();
+      return Tweet.remove({ _id: { $in: tweetId } });//deleting tweets from db
+    }).then(response => {
+      reply.redirect('/home');
     }).catch(err => {
       reply.redirect('/');
     });
@@ -167,21 +176,23 @@ exports.deleteTweetsAll = {
 };
 
 /*
-Facilitates deleting a specific user all tweets
+ Facilitates deleting a specific users all tweets
  */
 exports.userDeleteTweetsAll = {
   handler: function (request, reply) {
-      const userEmail = request.auth.credentials.loggedInUser;
-      User.findOne({ email: userEmail }).then(user => {
-        const userId = user.id;
-        return Tweet.remove({ sender: userId });
-      }).then(allTweets => {
-        reply.view('home', {
-          title: 'MyTweet Home',
-          _id: 'home',
-        });
-      }).catch(err => {
-        reply.redirect('/');
+    const userEmail = request.auth.credentials.loggedInUser;
+    User.findOne({ email: userEmail }).then(user => {
+      const userId = user.id;
+      user.posts = [];//clearing user posts list
+      return Tweet.remove({ sender: userId });
+    }).then(response => {
+      reply.view('home', {
+        title: 'MyTweet Home',
+        _id: 'home',
       });
-    },
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
 };
+

@@ -11,14 +11,13 @@ const userSchema = mongoose.Schema({
   email: String,
   password: String,
   joined: String,
-  followingPosts: [],
+  followedBy: [],
+  following: [],
   posts: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Tweet',
   },
   ],
-  followedBy: [],
-  following: [],
 });
 
 const User = mongoose.model('User', userSchema);

@@ -3,6 +3,7 @@
 const Admin = require('../models/admin');
 const User     = require('../models/user');
 const Tweet    = require('../models/tweet');
+const Friendship = require('../models/friendship');
 const Joi = require('joi');
 var dateFormat = require('dateformat');
 var now        = null;
@@ -68,6 +69,7 @@ exports.admin_signup = {
 /*
 Register new administrator
  */
+/*
 exports.admin_register = {
   auth: false,
   validate: {
@@ -100,9 +102,9 @@ exports.admin_register = {
   },
 };
 
-/*
+/!*
 Admin authentication
- */
+ *!/
 exports.admin_authenticate = {
   auth: false,
 
@@ -141,6 +143,7 @@ exports.admin_authenticate = {
     });
   },
 };
+*/
 
 /*
 Renders global admin timeline
@@ -174,7 +177,7 @@ exports.adminDeleteTweet = {
           }
         });
       });
-      return Tweet.remove({ _id: { $in: tweetsId } });//delete all selected tweets from db*/
+      return Tweet.remove({ _id: { $in: tweetsId } });//delete all selected tweets from db
     }).then(response => {
       reply.redirect('/admin_timeline');
     }).catch(err => {
@@ -182,15 +185,6 @@ exports.adminDeleteTweet = {
     });
   },
 };
-
-/*User.find({ _id: { $in: usersId } }).then(foundUsers => {
-      let tweetsId = request.payload.tweet;
-      let userTweets = foundUser.posts;
-      tweetsId.forEach(tweet => {//looping through selected tweets and
-        userTweets.remove(tweet);//delete each selected tweet from users posts list
-      });
-      return Tweet.remove({ _id: { $in: tweetsId } });//delete all selected tweets from db*/
-
 
 /*
 Facilitates deleting all tweets

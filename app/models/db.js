@@ -17,8 +17,7 @@ mongoose.connection.on('connected', function () {
     const data = require('./data.json');
     const Tweet = require('./tweet');
     const User = require('./user');
-    const FollowedBy = require('./user');
-    const Following = require('./user');
+    const Friendship = require('./friendship');
     seeder.seed(data, { dropDatabase: false, dropCollections: true }).then(dbData => {
       console.log('preloading Test Data');
       console.log(dbData);
