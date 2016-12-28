@@ -3,12 +3,28 @@
 <section class="ui raised segment">
     <div class="ui two column grid">
         <div class="ui six wide column">
-            <aside class="ui five wide column">
-                <img src="images/settings.jpg" class="ui medium image">
-            </aside>
+                <div class="ui grid">
+                    <form class="ui form" action="/adminUser_timeline" method="POST">
+                        <div class="ui card">
+                            <div class="image">
+                                <img src="/images/{{user.firstName}}.jpg">
+                            </div>
+                            <div class="content">
+                                <a class="ui basic tiny button" value="{{user.email}}" id="senderEmail" value="{{sender.email}}"
+                                        name="sender">Update profile picture</a>
+                                <div class="meta">
+                                    <span class="date">Joined: {{user.joined}}</span>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <a><i class="users icon"></i>  {{followersList.length}} Followers</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
         </div>
         <div class="ui ten wide column">
-            <div class="ui stacked fluid form segment">
+            <div class="ui stacked form segment">
                 <form action="/update_settings" method="POST">
                     <h5 class="ui header">Update personal details</h5>
                     <div class="field">
@@ -22,6 +38,50 @@
                     <button class="ui grey submit button"><i class="settings icon"></i>Update</button>
                 </form>
                 {{> formerror }}
+            </div>
+            <div class="ui stacked form segment">
+                <form class="ui form" action="/deleteUser" method="POST">
+                    <h5 class="ui header">Following:</h5>
+                    <table class="ui selectable striped table segment">
+                        <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th></th>
+                            <th></th>
+                            <th><i class="mail icon"></i>     </th>
+                            <th><i class="twitter icon"></i> </th>
+                            <th><i class="users icon"></i> </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each followers}}
+                            <tr>
+                                <td>
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" id="usercheckbox" name="userId" value="{{_id}}">
+                                        <label></label>
+                                    </div>
+                                </td>
+                                <td> {{firstName}} </td>
+                                <td> {{lastName}}  </td>
+                                <td><button class="ui basic small button" name="userEmail" formaction="/user_profile" value="{{email}}"
+                                            name="user"><i class="info circle icon"></i>{{email}}</button></td>
+                                <td> {{posts.length}} </td>
+                                <td> {{followedBy.length}} </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                        <tfoot class="full-width">
+                        <tr>
+                            <th colspan="4">
+                                <div class="ui buttons">
+                                    <button class="ui grey submit button"><i class="remove user icon"></i>Unfollow</button>
+                                </div>
+                            </th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </form>
             </div>
         </div>
     </div>

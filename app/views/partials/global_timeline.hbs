@@ -4,7 +4,7 @@
             <img src="images/admintimeline.jpg" class="ui large image">
         </asside>
         <article class="ten wide column">
-            <h4>All tweets: {{tweets.length}}</h4>
+            <h4>Global timeline: {{tweets.length}}</h4>
             <form class="ui form" action="/adminDeleteTweet" method="POST">
                 <table class="ui selectable striped table segment">
                     <thead>
@@ -32,7 +32,7 @@
                                         <div class="content">
                                             <a class="author">
                                                 <button class="ui basic small button" id="senderEmail" formaction="/user_timeline" value="{{sender.email}}"
-                                                        name="sender"><i class="info circle icon"></i>{{sender.firstName}} {{sender.lastName}}
+                                                        name="sender">@ {{sender.firstName}} {{sender.lastName}}
                                                 </button>
                                             </a>
                                             <div class="metadata">

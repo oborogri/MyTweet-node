@@ -4,7 +4,7 @@
             <img src="images/timeline.jpg" class="ui medium image">
         </asside>
         <article class="ten wide column">
-            <h4> Posts: {{tweets.length}}</h4>
+            <h4> Home timeline: {{tweets.length}}</h4>
             <form class="ui form" action="/deleteTweet" method="POST">
                 <table class="ui selectable striped table segment">
                     <thead>
@@ -32,7 +32,7 @@
                                         </a>
                                         <div class="content">
                                             <div class="author">
-                                                @{{sender.firstName}} {{sender.lastName}}
+                                                {{sender.firstName}} {{sender.lastName}}
                                             </div>
                                             <div class="metadata">
                                                 <div class="date">{{date}}</div>

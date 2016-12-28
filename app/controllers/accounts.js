@@ -128,8 +128,14 @@ Renders update settings page
 exports.viewSettings = {
   handler: function (request, reply) {
     var userEmail = request.auth.credentials.loggedInUser;
-    User.findOne({ email: userEmail }).then(foundUser => {
-      reply.view('settings', { title: 'Edit Account Settings', user: foundUser });
+    User.findOne({ email: userEmail }).populate('followedBy').then(foundUser => {
+      let followersList = foundUser.followedBy;
+      let followingList = foundUser.following;
+      reply.view('settings',
+          { title: 'Edit Account Settings',
+            user: foundUser,
+            followers: followersList,
+            following: followingList, });
     }).catch(err => {
       reply.redirect('/');
     });
@@ -166,8 +172,8 @@ exports.updateSettings = {
     User.findOne({ email: loggedInUserEmail }).then(user => {
       user.email = editedUser.email;
       user.password = editedUser.password;
-      user.save();
-      request.cookieAuth.clear(); //clear session cookie for old user email
+      request.cookieAuth.clear();//clear session cookie for old user email
+      return user.save();
     }).then(user => {
       request.cookieAuth.set({
         loggedIn: true, // set new cookie with updated email

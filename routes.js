@@ -37,6 +37,7 @@ module.exports = [
   { method: 'GET', path: '/user_profile',      config: Admins.user_profile },
   { method: 'GET', path: '/social_graph',      config: Admins.social_graph },
 
+  { method: 'POST', path: '/admin_authenticate',  config: Admins.admin_authenticate },
   { method: 'POST', path: '/adminUser_timeline', config: Admins.adminUser_timeline },
   { method: 'POST', path: '/user_profile',       config: Admins.user_profile },
 

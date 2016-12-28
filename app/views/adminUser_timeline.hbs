@@ -4,9 +4,9 @@
 
     {{> timeline }}
     <script>
-    {{#each tweets}}
         document.getElementById("delete_tweet").setAttribute('disabled', 'disabled');
         document.getElementById("delete_all").setAttribute('disabled', 'disabled');
+    {{#each tweets}}
         document.getElementById("senderEmail").setAttribute('disabled', 'disabled');
         document.getElementById("checkbox").setAttribute('disabled', 'disabled');
     {{/each}}

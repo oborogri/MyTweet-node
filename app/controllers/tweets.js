@@ -184,6 +184,7 @@ exports.userDeleteTweetsAll = {
     User.findOne({ email: userEmail }).then(user => {
       const userId = user.id;
       user.posts = [];//clearing user posts list
+      user.save();
       return Tweet.remove({ sender: userId });
     }).then(response => {
       reply.view('home', {

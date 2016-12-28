@@ -22,6 +22,7 @@ exports.follow = {
             const friendship = new Friendship();//creating new friendship object
             friendship.sourceUser = sourceUserId;
             friendship.targetUser = targetUserId;
+            friendship.save();
           } else {
             console.log('Already followed by this user');
           }

@@ -19,6 +19,48 @@ exports.admin_login = {
 };
 
 /*
+ Admin authentication
+ */
+exports.admin_authenticate = {
+  auth: false,
+
+  validate: {
+
+    payload: {
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+    },
+
+    failAction: function (request, reply, source, error) {
+      reply.view('admin_login', {
+        title: 'Login error',
+        errors: error.data.details,
+      }).code(400);
+    },
+
+    options: {
+      abortEarly: false,
+    },
+  },
+  handler: function (request, reply) {
+    const admin = request.payload;
+    Admin.findOne({ email: admin.email }).then(foundAdmin => {
+      if (admin.password === 'adminkey' && admin.email === 'admin@wit.ie') {
+        request.cookieAuth.set({
+          loggedIn: true,
+          loggedInUser: admin.email,
+        });
+        reply.redirect('/admin_timeline');
+      } else {
+        reply.redirect('/');
+      }
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
+
+/*
 Renders specific users timeline in admin
  */
 exports.adminUser_timeline = {
@@ -102,49 +144,6 @@ exports.admin_register = {
   },
 };
 
-/!*
-Admin authentication
- *!/
-exports.admin_authenticate = {
-  auth: false,
-
-  validate: {
-
-    payload: {
-      email: Joi.string().email().required(),
-      password: Joi.string().required(),
-    },
-
-    failAction: function (request, reply, source, error) {
-      reply.view('admin_login', {
-        title: 'Login error',
-        errors: error.data.details,
-      }).code(400);
-    },
-
-    options: {
-      abortEarly: false,
-    },
-  },
-  handler: function (request, reply) {
-    const admin = request.payload;
-    Admin.findOne({ email: admin.email }).then(foundAdmin => {
-      if (admin.password === 'adminkey' && admin.email === 'admin@wit.ie') {
-        request.cookieAuth.set({
-          loggedIn: true,
-          loggedInUser: admin.email,
-        });
-        reply.redirect('/admin_timeline');
-      } else {
-        reply.redirect('/');
-      }
-    }).catch(err => {
-      reply.redirect('/');
-    });
-  },
-};
-*/
-
 /*
 Renders global admin timeline
  */
@@ -167,17 +166,26 @@ Facilitates admin deleting a specific tweet
  */
 exports.adminDeleteTweet = {
   handler: function (request, reply) {
-    let tweetsId = request.payload.tweet;//selection may contain multiple tweets id
-    User.find({ $or: [{ posts: { _id: { $in: tweetsId } } }, { tweetsId }] }).then(allUsers => {
+    let tweetId = request.payload.tweet;//selection may contain multiple tweets id
+    let selectedTweets = [];
+    if (typeof tweetId === 'object') {//payload contains an array of tweets ids
+      selectedTweets.push.apply(selectedTweets, tweetId);
+    } else {//payload contains just a single tweet id
+      selectedTweets.push(tweetId);//insert payload into a new array
+    }
+
+    User.find({ posts: { $in: selectedTweets } }).then(allUsers => {
       allUsers.forEach(user => {//looping through all users
-        tweetsId.forEach(tweetId => {//looping through selected tweets
+        selectedTweets.forEach(tweet => {//looping through the payload tweets ids
           for (var i = 0; i < user.posts.length; i++) {
-            user.posts.remove(tweetId);//delete each selected tweet from each users posts list
-            user.save();
+            if (user.posts[i] == tweet) {
+              user.posts.splice(i, 1);//deleting selected ids from user's posts list
+              user.save();
+            }
           }
         });
       });
-      return Tweet.remove({ _id: { $in: tweetsId } });//delete all selected tweets from db
+      return Tweet.remove({ _id: { $in: tweetId } });//delete all selected tweets from db
     }).then(response => {
       reply.redirect('/admin_timeline');
     }).catch(err => {

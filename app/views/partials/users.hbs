@@ -4,7 +4,7 @@
             <img src="images/users.jpg" class="ui medium image">
         </asside>
         <article class="ten wide column">
-            <h4>MyTweet Users: {{users.length}}</h4>
+            <h4>MyTweet users: {{users.length}}</h4>
         <form class="ui form" action="/deleteUser" method="POST">
             <table class="ui selectable striped table segment">
                 <thead>
@@ -14,7 +14,8 @@
                     <th>Surname</th>
                     <th><i class="mail icon"></i>     </th>
                     <th><i class="calendar icon"></i> </th>
-                    <th><i class="comments icon"></i> </th>
+                    <th><i class="twitter icon"></i> </th>
+                    <th><i class="users icon"></i> </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -31,7 +32,8 @@
                         <td><button class="ui basic small button" name="userEmail" formaction="/user_profile" value="{{email}}"
                                     name="user"><i class="info circle icon"></i>{{email}}</button></td>
                         <td> {{joined}}   </td>
-                        <td> {{tweets}}    </td>
+                        <td> {{posts.length}} </td>
+                        <td> {{followedBy.length}} </td>
                     </tr>
                 {{/each}}
                 </tbody>
