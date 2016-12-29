@@ -63,7 +63,7 @@ Renders specific users timeline
  */
 exports.user_timeline = {
   handler: function (request, reply) {
-    const userEmail = request.payload.sender;
+    const userEmail = request.payload.email;
     User.findOne({ email: userEmail }).then(user => {
       const userId = user.id;
       return Tweet.find({ sender: userId }).populate('sender');

@@ -88,9 +88,11 @@ exports.user_profile = {
   handler: function (request, reply) {
     const foundEmail = request.payload.userEmail;
     User.findOne({ email: foundEmail }).populate('followedBy').then(user => {
+      let userTweets = user.posts;
       reply.view('user_profile',
           { title: 'User Profile',
             user: user,
+            tweets: userTweets,
             _id: 'userslist', });
     }).catch(err => {
       reply.redirect('/');

@@ -128,7 +128,7 @@ Renders update settings page
 exports.viewSettings = {
   handler: function (request, reply) {
     var userEmail = request.auth.credentials.loggedInUser;
-    User.findOne({ email: userEmail }).populate('followedBy').then(foundUser => {
+    User.findOne({ email: userEmail }).populate('following').then(foundUser => {
       let followersList = foundUser.followedBy;
       let followingList = foundUser.following;
       reply.view('settings',

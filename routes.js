@@ -50,6 +50,7 @@ module.exports = [
 
     //Friendships
   { method: 'POST', path: '/follow',               config: Friendships.follow },
+  { method: 'POST', path: '/unfollow',             config: Friendships.unfollow },
 
   {
     method: 'GET',

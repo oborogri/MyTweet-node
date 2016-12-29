@@ -1,6 +1,6 @@
 <section class="ui raised segment">
-    <div class="ui grid">
-        <form class="ui form" action="/adminUser_timeline" method="POST">
+    <div class="ui two column grid">
+        <div class="ui six wide column">
         <div class="ui card">
             <div class="image">
                 <img src="/images/{{user.firstName}}.jpg">
@@ -8,16 +8,63 @@
             <div class="content">
                 <button class="ui basic tiny button" value="{{user.email}}" id="senderEmail" value="{{sender.email}}"
                         name="sender">{{user.firstName}} {{user.lastName}}</button>
-                <div class="meta">
-                    <span class="date">Joined: {{user.joined}}</span>
-                </div>
             </div>
             <div class="extra content">
-                <a>{{user.posts.length}} Posts
-                    <i class="twitter icon"></i>  {{user.followedBy.length}} Followers
+                <a><i class="calendar icon"></i>Joined: {{user.joined}}<br>
+                    <i class="users icon"></i>{{user.followedBy.length}} Followers<br>
                 </a>
             </div>
             </div>
-        </form>
+            </div>
+        <div class="ui ten wide column">
+            <div class="ui raised segment">
+                <table class="ui selectable striped table segment">
+                    <thead>
+                    <tr>
+                        <th>Posts: {{user.posts.length}}</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each tweets}}
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                                <div class="ui comments">
+                                    <div class="comment">
+                                        <a class="avatar">
+                                            <img src="/images/{{sender.firstName}}.jpg">
+                                            <span></span>
+                                        </a>
+                                        <div class="content">
+                                            <div class="author">
+                                                {{firstName}} {{sender.lastName}}
+                                            </div>
+                                            <div class="metadata">
+                                                <div class="date">{{date}}</div>
+                                                <div class="rating">
+                                                    <a><i class="twitter icon"></i>{{sender.followedBy.length}} Followers
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="text">
+                                                {{text}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                    <tfoot class="full-width">
+                    <tr>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
 </section>
