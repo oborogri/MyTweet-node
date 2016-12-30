@@ -1,5 +1,5 @@
 'use strict';
-
+var request = require('sync-request');
 const assert = require('chai').assert;
 const TweetService = require('./tweet-service');
 const fixtures = require('./fixtures.json');

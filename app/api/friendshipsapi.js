@@ -8,7 +8,9 @@ const Boom = require('boom');
  */
 exports.find = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Friendship.find({})
@@ -26,7 +28,9 @@ exports.find = {
  */
 exports.findOne = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Friendship.findOne({ _id: request.params.id }).then(friendship => {
@@ -47,7 +51,9 @@ exports.findOne = {
  */
 exports.userFollowing = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Friendship.find({ sourceUser: request.params.id }).then(friendships => {
@@ -64,7 +70,9 @@ exports.userFollowing = {
  */
 exports.userFollowers = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Friendship.find({ targetUser: request.params.id }).then(friendships => {
@@ -77,28 +85,13 @@ exports.userFollowers = {
 };
 
 /*
- Create new friendship
- */
-exports.createFriendship = {
-
-  auth: false,
-
-  handler: function (request, reply) {
-    const friendship = new FriendUser(request.payload);
-    user.save().then(newUser => {
-      reply(newUser).code(201);
-    }).catch(err => {
-      reply(Boom.badImplementation('error creating User'));
-    });
-  },
-};
-
-/*
  Delete one friendship by _id
  */
 exports.deleteOne = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Friendship.remove({ _id: request.params.id }).then(friendship => {
@@ -114,7 +107,9 @@ exports.deleteOne = {
  */
 exports.deleteUserFollowing = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Friendship.remove({ sourceUser: request.params.id }).then(friendships => {
@@ -130,7 +125,9 @@ exports.deleteUserFollowing = {
  */
 exports.deleteUserFollowers = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Friendship.remove({ targetUser: request.params.id }).then(friendships => {
@@ -146,7 +143,9 @@ exports.deleteUserFollowers = {
  */
 exports.deleteAll = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Friendship.remove({}).then(err => {

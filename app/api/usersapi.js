@@ -2,13 +2,37 @@
 
 const User = require('../models/user');
 const Boom = require('boom');
+const utils = require('./utils.js');
+
+/*
+User authentication handler
+ */
+exports.authenticate = {
+  //authentication route must remain unguarded to allow user login
+  auth: false,
+  handler: function (request, reply) {
+    const user = request.payload;
+    User.findOne({ email: user.email }).then(foundUser => {
+      if (foundUser && foundUser.password === user.password) {
+        const token = utils.createToken(foundUser);
+        reply({ success: true, token: token }).code(201);
+      } else {
+        reply({ success: false, message: 'Authentication failed. User not found.' }).code(201);
+      }
+    }).catch(err => {
+      reply(Boom.notFound('internal db failure'));
+    });
+  },
+};
 
 /*
 Find all users
  */
 exports.find = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     User.find({}).exec().then(users => {
@@ -17,7 +41,6 @@ exports.find = {
       reply(Boom.badImplementation('error accessing db'));
     });
   },
-
 };
 
 /*
@@ -25,7 +48,9 @@ Find one user by _id
  */
 exports.findOne = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     User.findOne({ _id: request.params.id }).then(user => {
@@ -46,7 +71,9 @@ Delete one user with specific _id
  */
 exports.deleteOne = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     User.remove({ _id: request.params.id }).then(user => {
@@ -62,7 +89,9 @@ Create new user
  */
 exports.createUser = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     const user = new User(request.payload);
@@ -72,6 +101,7 @@ exports.createUser = {
       reply(Boom.badImplementation('error creating User'));
     });
   },
+
 };
 
 /*
@@ -79,7 +109,9 @@ Delete all users
  */
 exports.deleteAll = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     User.remove({}).then(err => {
@@ -88,5 +120,4 @@ exports.deleteAll = {
       reply(Boom.badImplementation('error removing Users'));
     });
   },
-
 };

@@ -7,25 +7,37 @@
       "email":     "homer@simpson.com",
       "password":  "secret",
       "joined":    "Wed, Nov 2nd, 2016",
-      "posts":      4
+      "posts":      [],
+      "followedBy": [],
+      "following": []
     },
     {
-    "firstName": "Marge",
-    "lastName":  "Simpson",
-    "email":     "marge@simpson.com",
-    "password":  "secret",
-    "joined":    "Thur, Nov 3rd, 2016",
-    "posts":      2
+      "firstName": "Marge",
+      "lastName":  "Simpson",
+      "email":     "marge@simpson.com",
+      "password":  "secret",
+      "joined":    "Thur, Nov 3rd, 2016",
+      "posts":     [],
+      "following": [],
+      "followedBy": []
     },
     {
-    "firstName": "Bart",
-    "lastName":  "Simpson",
-    "email":     "bart@simpson.com",
-    "password":  "secret",
-    "joined":    "Fri, Nov 4th, 2016",
-    "posts":      1
+      "firstName": "Bart",
+      "lastName":  "Simpson",
+      "email":     "bart@simpson.com",
+      "password":  "secret",
+      "joined":    "Fri, Nov 4th, 2016",
+      "posts":      [],
+      "followedBy": [],
+      "following": []
     }
     ],
+  "friendships": [
+    {
+      "sourceUser": [],
+      "targetUser": []
+    }
+  ],
 
   "tweets": [
     {
@@ -46,7 +58,9 @@
     "email":     "barnie@grumble.com",
     "password":  "secret",
     "joined":    "Sat, Nov 5th, 2016",
-    "posts":      1
+    "posts":      [],
+    "followedBy": [],
+    "following": []
   },
 
   "newTweet":

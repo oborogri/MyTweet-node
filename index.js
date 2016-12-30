@@ -2,6 +2,7 @@
 
 const Hapi = require('hapi');
 const Joi = require('joi');
+const utils = require('./app/api/utils.js');
 
 var fs = require('fs');
 var server = new Hapi.Server();
@@ -9,7 +10,7 @@ server.connection({ port: process.env.PORT || 4000 });
 
 require('./app/models/db');
 
-server.register([require('inert'), require('vision'), require('hapi-auth-cookie')], err => {
+server.register([require('inert'), require('vision'), require('hapi-auth-cookie'), require('hapi-auth-jwt2')], err => {
 
   if (err) {
     throw err;
@@ -35,8 +36,16 @@ server.register([require('inert'), require('vision'), require('hapi-auth-cookie'
     redirectTo: '/login',
   });
 
+  //server default authentication strategy
   server.auth.default({
     strategy: 'standard',
+  });
+
+  //jwt authentication strategy
+  server.auth.strategy('jwt', 'jwt', {
+    key: 'secretpasswordnotrevealedtoanyone',
+    validateFunc: utils.validate,
+    verifyOptions: { algorithms: ['HS256'] },
   });
 
   server.route(require('./routes'));

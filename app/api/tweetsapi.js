@@ -8,7 +8,9 @@ Find all tweets
  */
 exports.findAllTweets = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Tweet.find({}).populate('sender').then(tweets => {
@@ -24,7 +26,9 @@ Find a specific user's tweets
  */
 exports.findUsersTweets = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Tweet.find({ sender: request.params.id }).then(tweets => {
@@ -41,7 +45,9 @@ Find one tweet by _id
  */
 exports.findOne = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Tweet.findOne({ _id: request.params.id }).then(tweet => {
@@ -60,9 +66,11 @@ exports.findOne = {
 /*
 Delete one tweet by _id
  */
-exports.deleteOne = {
+exports.deleteOneTweet = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Tweet.remove({ _id: request.params.id }).then(tweet => {
@@ -78,7 +86,9 @@ Create a new tweet and associate it with a specific user
  */
 exports.createTweet = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     const tweet = new Tweet(request.payload);
@@ -97,7 +107,9 @@ Delete all tweets
  */
 exports.deleteAllTweets = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Tweet.remove({}).then(err => {
@@ -115,7 +127,9 @@ Delete a specific user's tweets
 
 exports.deleteUsersTweets = {
 
-  auth: false,
+  auth: {
+    strategy: 'jwt',
+  },
 
   handler: function (request, reply) {
     Tweet.remove({ sender: request.params.id }).then(result => {

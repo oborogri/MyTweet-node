@@ -26,17 +26,21 @@ class TweetService {
     return this.httpService.get('/api/users/' + id + '/tweets');
   }
 
+  deleteOneTweet(id) {
+    return this.httpService.delete('/api/tweets/' + id);
+  }
+
   deleteAllTweets() {
     return this.httpService.delete('/api/tweets');
   }
 
   //users/////////////////////////////
-  deleteUsersTweets(id) {
-    return this.httpService.delete('/api/users/' + id + '/tweets');
+  authenticate(user) {
+    return this.httpService.post('/api/users/authenticate', user);
   }
 
-  deleteOneTweet(id) {
-    return this.httpService.delete('/api/tweets/' + id);
+  deleteUsersTweets(id) {
+    return this.httpService.delete('/api/users/' + id + '/tweets');
   }
 
   getUsers() {
@@ -68,11 +72,15 @@ class TweetService {
     return this.httpService.get('/api/friendships/' + id);
   }
 
-  getUserFollowing() {
+  createFriendship(id, friendship) {
+    return this.httpService.post('/api/friendships/' + id + '/tweets', tweet);
+  }
+
+  getUserFollowing(id) {
     return this.httpService.get('/api/friendships/sourceUser/' + id);
   }
 
-  getUserFollowers() {
+  getUserFollowers(id) {
     return this.httpService.get('/api/friendships/targetUser/' + id);
   }
 

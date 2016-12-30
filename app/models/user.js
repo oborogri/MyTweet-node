@@ -10,7 +10,6 @@ const userSchema = mongoose.Schema({
   lastName: String,
   email: String,
   password: String,
-  avatar: { data: Buffer, contentType: String },
   joined: String,
   followedBy: [],
   following: [],
