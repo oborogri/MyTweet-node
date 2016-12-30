@@ -9,6 +9,7 @@ class TweetService {
     this.httpService = new SyncHttpService(baseUrl);
   }
 
+  //tweets///////////////////////////
   getTweets() {
     return this.httpService.get('/api/tweets');
   }
@@ -29,6 +30,7 @@ class TweetService {
     return this.httpService.delete('/api/tweets');
   }
 
+  //users/////////////////////////////
   deleteUsersTweets(id) {
     return this.httpService.delete('/api/users/' + id + '/tweets');
   }
@@ -56,6 +58,40 @@ class TweetService {
   deleteOneUser(id) {
     return this.httpService.delete('/api/users/' + id);
   }
+
+  //friendships////////////////////////
+  getFriendships() {
+    return this.httpService.get('/api/friendships');
+  }
+
+  getFriendship(id) {
+    return this.httpService.get('/api/friendships/' + id);
+  }
+
+  getUserFollowing() {
+    return this.httpService.get('/api/friendships/sourceUser/' + id);
+  }
+
+  getUserFollowers() {
+    return this.httpService.get('/api/friendships/targetUser/' + id);
+  }
+
+  deleteUsersFollowing(id) {
+    return this.httpService.delete('/api/friendships/sourceUser/' + id);
+  }
+
+  deleteUsersFollowers(id) {
+    return this.httpService.delete('/api/friendships/targetUser/' + id);
+  }
+
+  deleteOneFriendship(id) {
+    return this.httpService.delete('/api/friendships/' + id);
+  }
+
+  deleteAllFriendships() {
+    return this.httpService.delete('/api/friendships');
+  }
+
 }
 
 module.exports = TweetService;

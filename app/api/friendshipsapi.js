@@ -77,6 +77,23 @@ exports.userFollowers = {
 };
 
 /*
+ Create new friendship
+ */
+exports.createFriendship = {
+
+  auth: false,
+
+  handler: function (request, reply) {
+    const friendship = new FriendUser(request.payload);
+    user.save().then(newUser => {
+      reply(newUser).code(201);
+    }).catch(err => {
+      reply(Boom.badImplementation('error creating User'));
+    });
+  },
+};
+
+/*
  Delete one friendship by _id
  */
 exports.deleteOne = {
