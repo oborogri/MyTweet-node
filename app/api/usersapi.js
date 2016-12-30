@@ -72,7 +72,6 @@ exports.createUser = {
       reply(Boom.badImplementation('error creating User'));
     });
   },
-
 };
 
 /*
