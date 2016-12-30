@@ -6,7 +6,7 @@ const Boom = require('boom');
 /*
  Finds all friendships
  */
-exports.findAllFriendships = {
+exports.find = {
 
   auth: false,
 
@@ -22,43 +22,9 @@ exports.findAllFriendships = {
 };
 
 /*
- Find a specific user's friendships following
- */
-exports.findUsersFollowing = {
-
-  auth: false,
-
-  handler: function (request, reply) {
-    Friendship.find({ sourceUser: request.params.id }).then(friendships => {
-      reply(friendships);
-    }).catch(err => {
-      reply(Boom.badImplementation('error accessing db'));
-    });
-  },
-
-};
-
-/*
- Find a specific user's friendships followers
- */
-exports.findUsersFollowers = {
-
-  auth: false,
-
-  handler: function (request, reply) {
-    Friendship.find({ targetUser: request.params.id }).then(friendships => {
-      reply(friendships);
-    }).catch(err => {
-      reply(Boom.badImplementation('error accessing db'));
-    });
-  },
-
-};
-
-/*
  Find one friendship by _id
  */
-exports.findOneById = {
+exports.findOne = {
 
   auth: false,
 
@@ -77,9 +43,43 @@ exports.findOneById = {
 };
 
 /*
+ Find a specific user's friendships following
+ */
+exports.userFollowing = {
+
+  auth: false,
+
+  handler: function (request, reply) {
+    Friendship.find({ sourceUser: request.params.id }).then(friendships => {
+      reply(friendships);
+    }).catch(err => {
+      reply(Boom.badImplementation('error accessing db'));
+    });
+  },
+
+};
+
+/*
+ Find a specific user's friendships followers
+ */
+exports.userFollowers = {
+
+  auth: false,
+
+  handler: function (request, reply) {
+    Friendship.find({ targetUser: request.params.id }).then(friendships => {
+      reply(friendships);
+    }).catch(err => {
+      reply(Boom.badImplementation('error accessing db'));
+    });
+  },
+
+};
+
+/*
  Delete one friendship by _id
  */
-exports.deleteOneById = {
+exports.deleteOne = {
 
   auth: false,
 
@@ -95,7 +95,7 @@ exports.deleteOneById = {
 /*
  Delete one user's following
  */
-exports.deleteAllUsersFollowing = {
+exports.deleteUserFollowing = {
 
   auth: false,
 
@@ -111,7 +111,7 @@ exports.deleteAllUsersFollowing = {
 /*
  Delete one user's followers
  */
-exports.deleteAllUsersFollowers = {
+exports.deleteUserFollowers = {
 
   auth: false,
 
@@ -127,7 +127,7 @@ exports.deleteAllUsersFollowers = {
 /*
  Delete all friendships
  */
-exports.deleteAllFriendships = {
+exports.deleteAll = {
 
   auth: false,
 
