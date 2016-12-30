@@ -3,10 +3,38 @@
 <section class="ui raised segment">
     <div class="ui grid">
         <asside class="six wide column">
+            <div class="ui mini statistics">
+                <div class="statistic">
+                    <div class="value">
+                        <i class="twitter icon"></i>
+                        {{stats.posts}}
+                    </div>
+                    <div class="label">
+                        Posts
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <i class="history icon"></i>
+                        {{stats.postsHour}}
+                    </div>
+                    <div class="label">
+                        Last hour
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <i class="users icon"></i>
+                        {{stats.users}}
+                    </div>
+                    <div class="label">
+                        Users
+                    </div>
+                </div>
+            </div>
             <img src="images/admintimeline.jpg" class="ui large image">
         </asside>
         <article class="ten wide column">
-            <h4>All users tweets: {{tweets.length}}</h4>
             <form class="ui form" action="/adminDeleteTweet" method="POST">
                 <table class="ui selectable striped table segment">
                     <thead>
@@ -28,13 +56,13 @@
                                 <div class="ui comments">
                                     <div class="comment">
                                         <a class="avatar">
-                                            <img src="/images/{{sender.firstName}}.jpg">
+                                            <img src="/images/{{sender.firstName}}.jpg" class="ui circular inline image">
                                             <span></span>
                                         </a>
                                         <div class="content">
                                             <a class="author">
                                                 <button class="ui basic small button" id="senderEmail" formaction="/adminUser_timeline" value="{{sender.email}}"
-                                                        name="sender"><i class="twitter icon"></i>{{sender.firstName}} {{sender.lastName}}
+                                                        name="email"><i class="twitter icon"></i>{{sender.firstName}} {{sender.lastName}}
                                                 </button>
                                             </a>
                                             <div class="metadata">

@@ -3,6 +3,7 @@
 const Hapi = require('hapi');
 const Joi = require('joi');
 
+var fs = require('fs');
 var server = new Hapi.Server();
 server.connection({ port: process.env.PORT || 4000 });
 

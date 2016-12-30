@@ -186,3 +186,20 @@ exports.updateSettings = {
   },
 
 };
+
+/*
+Upload user profile picture
+TO DO - implementation
+ */
+exports.upload_picture = {
+  handler: function (request, reply) {
+    var userEmail = request.auth.credentials.loggedInUser;
+    User.findOne({ email: userEmail }).populate('following').then(foundUser => {
+      let followersList = foundUser.followedBy;
+      let followingList = foundUser.following;
+      reply.redirect('/settings');
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};

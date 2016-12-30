@@ -4,6 +4,11 @@ const User = require('../models/user');
 const Friendship = require('../models/friendship');
 const Joi = require('joi');
 
+/*
+Facilitates following one selected user
+friedship reference is stored in user model object also
+in following and foollowedBy lists
+ */
 exports.follow = {
   handler: function (request, reply) {
     let targetUserFollowedBy = [];
@@ -41,6 +46,9 @@ exports.follow = {
   },
 };
 
+/*
+Facilitates unfollowing one or more selected users
+ */
 exports.unfollow = {
   handler: function (request, reply) {
 

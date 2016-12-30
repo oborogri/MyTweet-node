@@ -1,15 +1,34 @@
 <section class="ui raised segment">
-    <div class="ui grid">
+    <div class="ui two column grid">
         <asside class="six wide column">
+            <div class="ui mini statistics">
+                <div class="statistic">
+                    <div class="value">
+                        <i class="twitter icon"></i>
+                        {{stats.posts}}
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <i class="history icon"></i>
+                        {{stats.postsHour}}
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <i class="users icon"></i>
+                        {{stats.users}}
+                    </div>
+                </div>
+            </div>
             <img src="images/admintimeline.jpg" class="ui large image">
         </asside>
         <article class="ten wide column">
-            <h4>Global timeline: {{tweets.length}}</h4>
-            <form class="ui form" action="/adminDeleteTweet" method="POST">
+             <form class="ui form" action="/adminDeleteTweet" method="POST">
                 <table class="ui selectable striped table segment">
                     <thead>
                     <tr>
-                        <th>Select</th>
+                        <th></th>
                         <th></th>
                     </tr>
                     </thead>
@@ -17,16 +36,12 @@
                     {{#each tweets}}
                         <tr>
                             <td>
-                                <div class="ui checkbox">
-                                    <input type="checkbox" id="checkbox" name="tweet" value="{{_id}}">
-                                    <label></label>
-                                </div>
                             </td>
                             <td>
                                 <div class="ui comments">
                                     <div class="comment">
                                         <a class="avatar">
-                                            <img src="/images/{{sender.firstName}}.jpg">
+                                            <img src="/images/{{sender.firstName}}.jpg" class="ui circular inline image">
                                             <span></span>
                                         </a>
                                         <div class="content">
@@ -53,21 +68,14 @@
                         </tr>
                     {{/each}}
                     </tbody>
-                    <tfoot class="full-width">
-                    <tr>
-                        <th colspan="4">
-                            <div class="ui buttons">
-                                <button class="ui positive button" id="delete_tweet"><i class="trash icon"></i>Selected
-                                </button>
-                                <div class="or"></div>
-                                <button class="ui negative button" id="delete_all" formaction="/adminDeleteTweetsAll">
-                                    <i class="trash icon"></i>All
-                                </button>
-                            </div>
-                        </th>
-                    </tr>
-                    </tfoot>
                 </table>
+                    <div class="field">
+                        <textarea maxlength="140" name="text" id="text" placeholder="Add a comment"></textarea>
+                    </div>
+                    <button class="ui basic labeled submit icon button" formaction="/postcomment">
+                        <i class="icon edit"></i> Add comment
+                    </button>
+                </form>
             </form>
         </article>
     </div>

@@ -65,7 +65,7 @@ Renders specific users timeline in admin
  */
 exports.adminUser_timeline = {
   handler: function (request, reply) {
-    const userEmail = request.payload.sender;
+    const userEmail = request.payload.email;
     User.findOne({ email: userEmail }).then(user => {
       const userId = user.id;
       return Tweet.find({ sender: userId }).populate('sender');
@@ -87,12 +87,14 @@ Renders user profile view
 exports.user_profile = {
   handler: function (request, reply) {
     const foundEmail = request.payload.userEmail;
-    User.findOne({ email: foundEmail }).populate('followedBy').then(user => {
-      let userTweets = user.posts;
+    User.findOne({ email: foundEmail })
+        .populate('followedBy')
+        .populate('posts')
+        .populate('following')
+        .then(user => {
       reply.view('user_profile',
           { title: 'User Profile',
             user: user,
-            tweets: userTweets,
             _id: 'userslist', });
     }).catch(err => {
       reply.redirect('/');
@@ -111,51 +113,35 @@ exports.admin_signup = {
 };
 
 /*
-Register new administrator
- */
-/*
-exports.admin_register = {
-  auth: false,
-  validate: {
-
-    payload: {
-      firstName: Joi.string().required(),
-      lastName: Joi.string().required(),
-      email: Joi.string().email().required(),
-      password: Joi.string().required(),
-    },
-
-    failAction: function (request, reply, source, error) {
-      reply.view('admin_signup', {
-        title: 'Sign up error',
-        errors: error.data.details,
-      }).code(400);
-    },
-
-    options: {
-      abortEarly: false,
-    },
-  },
-  handler: function (request, reply) {
-    const admin = new Admin(request.payload);
-    admin.save().then(newAdmin => {
-      reply.redirect('/admin_login');
-    }).catch(err => {
-      reply.redirect('/');
-    });
-  },
-};
-
-/*
 Renders global admin timeline
  */
 exports.admin_timeline = {
   handler: function (request, reply) {
+    // instantiating a new object to store tweet statistics
+    var stats = new Object();
+    now = new Date();
+
+    //finds total tweets count
+    Tweet.count({ }, function (err, tweets) {
+      stats.posts = tweets;
+    });
+
+    //finds all tweets in the last hour
+    Tweet.count({ date: { $gt: now.getTime() - 1000 * 60 * 60 } }, function (err, tweets) {
+      stats.postsHour = tweets;
+    });
+
+    //finds total tweet users count
+    User.count({ }, function (err, users) {
+      stats.users = users;
+    });
+
     Tweet.find({}).populate('sender').then(allTweets => {
       reply.view('admin_timeline', {
         title: 'MyTweet Timeline',
         tweets: allTweets,
         _id: 'timeline',
+        stats: stats,
       });
     }).catch(err => {
       reply.redirect('/');
@@ -178,7 +164,7 @@ exports.adminDeleteTweet = {
 
     User.find({ posts: { $in: selectedTweets } }).then(allUsers => {
       allUsers.forEach(user => {//looping through all users
-        selectedTweets.forEach(tweet => {//looping through the payload tweets ids
+        selectedTweets.forEach(tweet => {//loop through the payload tweets ids
           for (var i = 0; i < user.posts.length; i++) {
             if (user.posts[i] == tweet) {
               user.posts.splice(i, 1);//deleting selected ids from user's posts list
@@ -222,11 +208,31 @@ Renders all users list
  */
 exports.userslist = {
   handler: function (request, reply) {
+    // instantiating a new object to store tweet statistics
+    var stats = new Object();
+    now = new Date();
+
+    //finds new users in the past week
+    User.count({ date: { $gt: now.getTime() - 7 * 24 * 60 * 60 } }, function (err, users) {
+      stats.usersWeek = users;
+    });
+
+    //finds total users count
+    User.count({ }, function (err, users) {
+      stats.users = users;
+    });
+
+    //finds total friendships count
+    Friendship.count({ }, function (err, friendships) {
+      stats.friendships = friendships;
+    });
+
     User.find({}).then(allUsers => {
       reply.view('userslist', {
         title: 'MyTweet Users',
         users: allUsers,
         _id: 'userslist',
+        stats: stats,
       });
     }).catch(err => {
       reply.redirect('/');

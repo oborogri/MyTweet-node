@@ -4,7 +4,26 @@
             <img src="images/timeline.jpg" class="ui medium image">
         </asside>
         <article class="ten wide column">
-            <h4> Home timeline: {{tweets.length}}</h4>
+            <div class="ui mini statistics" id="stats">
+                <div class="statistic">
+                    <div class="text value">
+                        {{stats.firstName}}<br>
+                        {{stats.lastName}}
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <i class="twitter icon"></i>
+                        {{stats.posts}}
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <i class="users icon"></i>
+                        {{stats.following}}
+                    </div>
+                </div>
+            </div>
             <form class="ui form" action="/deleteTweet" method="POST">
                 <table class="ui selectable striped table segment">
                     <thead>
@@ -18,8 +37,8 @@
                     {{#each tweets}}
                         <tr>
                             <td>
-                                <div class="ui checkbox">
-                                    <input type="checkbox" id="checkbox" name="tweet" value="{{_id}}">
+                                <div class="ui checkbox" id="checkbox">
+                                    <input type="checkbox" name="tweet" value="{{_id}}">
                                     <label></label>
                                 </div>
                             </td>
@@ -27,7 +46,7 @@
                                 <div class="ui comments">
                                     <div class="comment">
                                         <a class="avatar">
-                                            <img src="/images/{{sender.firstName}}.jpg">
+                                            <img src="/images/{{sender.firstName}}.jpg" class="ui circular inline image">
                                             <span></span>
                                         </a>
                                         <div class="content">
@@ -57,7 +76,7 @@
                             <div class="ui buttons">
                                 <button class="ui positive button" id="delete_tweet"><i class="trash icon"></i>Selected
                                 </button>
-                                <div class="or"></div>
+                                <div class="or" id="or"></div>
                                 <button class="ui negative button" id="delete_all" formaction="/userDeleteTweetsAll">
                                     <i class="trash icon"></i> All
                                 </button>

@@ -3,26 +3,20 @@
 <section class="ui raised segment">
     <div class="ui two column grid">
         <div class="ui six wide column">
-                <div class="ui grid">
-                    <form class="ui form" action="/adminUser_timeline" method="POST">
-                        <div class="ui card">
-                            <div class="image">
-                                <img src="/images/{{user.firstName}}.jpg">
-                            </div>
-                            <div class="content">
-                                <a>Update profile picture</a>
-                                <form method="POST" action="upload" ectype="multipart/form-data">
-                                <input type="file" name="file" />
-                                <br/> <input type="submit" value="Upload"/>
-                                </form>
-                            </div>
-                            <div class="extra content">
-                                <a><i class="calendar icon"></i>Joined: {{user.joined}}<br>
-                                    <i class="users icon"></i>{{followers.length}} Followers</a>
-                            </div>
-                        </div>
-                    </form>
+            <div class="ui grid">
+                <div class="ui card">
+                    <div class="image">
+                        <img src="/images/{{user.firstName}}.jpg">
+                    </div>
+                    <div class="extra content">
+                        <a>Update profile picture</a>
+                        <form method="POST" action="/" ectype="multipart/form-data">
+                            <input type="file" name="file"/>
+                            <br/> <input type="submit" value="Upload"/>
+                        </form>
+                    </div>
                 </div>
+            </div>
         </div>
         <div class="ui ten wide column">
             <div class="ui stacked form segment">
@@ -49,9 +43,9 @@
                             <th>Select</th>
                             <th></th>
                             <th></th>
-                            <th><i class="mail icon"></i>     </th>
-                            <th><i class="twitter icon"></i> </th>
-                            <th><i class="users icon"></i> </th>
+                            <th><i class="mail icon"></i></th>
+                            <th><i class="twitter icon"></i></th>
+                            <th><i class="users icon"></i></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -63,11 +57,17 @@
                                         <label></label>
                                     </div>
                                 </td>
-                                <td> {{firstName}} </td>
-                                <td> {{lastName}}  </td>
-                                <td><button class="ui basic small button" formaction="/user_timeline" name="email" value="{{email}}">
-                                    <i class="home icon"></i>{{email}}
-                                </button></td>
+                                <td></td>
+                                <td>
+                                    <img class="ui avatar image" src="/images/{{firstName}}.jpg">
+                                    <span>{{firstName}} {{lastName}}</span>
+                                </td>
+                                <td>
+                                    <button class="ui basic small button" formaction="/user_timeline" name="email"
+                                            value="{{email}}">
+                                        <i class="home icon"></i>{{email}}
+                                    </button>
+                                </td>
                                 <td> {{posts.length}} </td>
                                 <td> {{followedBy.length}} </td>
                             </tr>
@@ -77,7 +77,8 @@
                         <tr>
                             <th colspan="4">
                                 <div class="ui buttons">
-                                    <button class="ui tiny grey submit button"><i class="remove user icon"></i>Unfollow</button>
+                                    <button class="ui tiny grey submit button"><i class="remove user icon"></i>Unfollow
+                                    </button>
                                 </div>
                             </th>
                         </tr>

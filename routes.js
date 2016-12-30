@@ -18,6 +18,7 @@ module.exports = [
   { method: 'POST', path: '/register',        config: Accounts.register },
   { method: 'POST', path: '/authenticate',    config: Accounts.authenticate },
   { method: 'POST', path: '/update_settings', config: Accounts.updateSettings },
+  { method: 'POST', path: '/upload_picture',  config: Accounts.upload_picture },
 
     //Tweets
   { method: 'GET', path: '/home',            config: Tweets.home },
@@ -26,6 +27,7 @@ module.exports = [
 
   { method: 'POST', path: '/user_timeline',       config: Tweets.user_timeline },
   { method: 'POST', path: '/posttweet',           config: Tweets.posttweet },
+  { method: 'POST', path: '/postcomment',         config: Tweets.postcomment },
   { method: 'POST', path: '/userDeleteTweetsAll', config: Tweets.userDeleteTweetsAll },
   { method: 'POST', path: '/deleteTweet',         config: Tweets.deleteTweet },
 

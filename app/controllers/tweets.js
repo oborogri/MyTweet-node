@@ -5,7 +5,9 @@
 
 const User     = require('../models/user');
 const Tweet    = require('../models/tweet');
+const Friendship = require('../models/friendship');
 const Joi = require('joi');
+var moment = require('moment');
 var dateFormat = require('dateformat');
 var now        = null;
 var url = require('url');
@@ -15,9 +17,27 @@ Renders logged in user's timeline as home page
  */
 exports.home = {
   handler: function (request, reply) {
+
+    // instantiating a new object to store tweet statistics
+    var stats = new Object();
+    now = new Date();
+
+    //finds total tweets count
+    Tweet.count({ }, function (err, tweets) {
+      stats.posts = tweets;
+    });
+
     const userEmail = request.auth.credentials.loggedInUser;
     User.findOne({ email: userEmail }).then(user => {
       const userId = user.id;//finds loggedInUser id
+      stats.firstName = user.firstName;
+      stats.lastName = user.lastName;
+
+      //finds all user's following count for statistics
+      Friendship.count({ sourceUser: userId }, function (err, following) {
+        stats.following = following;
+      });
+
       return User.find({ $or: [{ _id: userId }, { followedBy: userId }] });//finds user and their friends
     }).then(allUsers => {
       let usersIdList = [];
@@ -34,6 +54,7 @@ exports.home = {
         title: 'MyTweet Home',
         tweets: allTweets,
         _id: 'home',
+        stats: stats,
       });
     }).catch(err => {
       reply.redirect('/');
@@ -46,11 +67,32 @@ Renders all users timeline
  */
 exports.global_timeline = {
   handler: function (request, reply) {
+
+    // instantiating a new object to store tweet statistics
+    var stats = new Object();
+    now = new Date();
+
+    //finds total tweets count
+    Tweet.count({ }, function (err, tweets) {
+      stats.posts = tweets;
+    });
+
+    //finds all tweets in the last hour
+    Tweet.count({ date: { $gt: now.getTime() - 1000 * 60 * 60 } }, function (err, tweets) {
+      stats.postsHour = tweets;
+    });
+
+    //finds total tweet users count
+    User.count({ }, function (err, users) {
+      stats.users = users;
+    });
+
     Tweet.find({}).populate('sender').then(allTweets => {
         reply.view('users_timeline', {
           title: 'MyTweet Timeline',
           tweets: allTweets,
           _id: 'timeline',
+          stats: stats,
         });
       }).catch(err => {
       reply.redirect('/');
@@ -63,15 +105,23 @@ Renders specific users timeline
  */
 exports.user_timeline = {
   handler: function (request, reply) {
+
+    // instantiating a new object to store tweet statistics
+    var stats = new Object();
+
     const userEmail = request.payload.email;
     User.findOne({ email: userEmail }).then(user => {
       const userId = user.id;
+      stats.firstName = user.firstName;
+      stats.lastName = user.lastName;
+
       return Tweet.find({ sender: userId }).populate('sender');
     }).then(allTweets => {
       reply.view('user_timeline', {
         title: 'User Timeline',
         tweets: allTweets,
         _id: 'user_timeline',
+        stats: stats,
       });
     }).catch(err => {
       reply.redirect('/');
@@ -136,6 +186,59 @@ exports.posttweet = {
       tweet.save();
     }).then(NewTweet => {
       reply.redirect('/home');
+    }).catch(err => {
+      reply.redirect('/');
+    });
+  },
+};
+
+/*
+ Creates and posts a tweet as a comment on the global timeline
+ */
+exports.postcomment = {
+
+  validate: {
+
+    payload: {
+      text: Joi.string().required(),
+    },
+
+    options: {
+      abortEarly: false,
+    },
+
+    failAction: function (request, reply, source, error) {
+      Tweet.find({}).then(tweetsAll => {
+        reply.view('newtweet', {
+          title: 'Message can\'t be blanc!',
+          tweets: tweetsAll,
+          errors: error.data.details,
+        }).code(400);
+      }).catch(err => {
+        reply.redirect('/home');
+      });
+    },
+  },
+
+  handler: function (request, reply) {
+    const userEmail = request.auth.credentials.loggedInUser;
+    let tweet = new Tweet(request.payload);
+    now = new Date();
+    tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');
+
+    //guard against null exception
+    if (request.payload.text == '') {
+      tweet.text = 'null';
+    }
+
+    User.findOne({ email: userEmail }).then(foundUser=> {
+      let userTweets = foundUser.posts;
+      userTweets.push(tweet);//add tweet object to users posts list
+      foundUser.save();
+      tweet.sender = foundUser.id;
+      tweet.save();
+    }).then(NewTweet => {
+      reply.redirect('/global_timeline');
     }).catch(err => {
       reply.redirect('/');
     });

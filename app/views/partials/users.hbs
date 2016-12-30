@@ -1,10 +1,38 @@
 <section class="ui raised segment">
     <div class="ui grid">
         <asside class="six wide column">
+            <div class="ui mini statistics">
+                <div class="statistic">
+                    <div class="value">
+                        <i class="user icon"></i>
+                        {{stats.users}}
+                    </div>
+                    <div class="label">
+                        Members
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <i class="calendar icon"></i>
+                        {{stats.usersWeek}}
+                    </div>
+                    <div class="label">
+                        This week
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <i class="users icon"></i>
+                        {{stats.friendships}}
+                    </div>
+                    <div class="label">
+                        Connections
+                    </div>
+                </div>
+            </div>
             <img src="images/users.jpg" class="ui medium image">
         </asside>
         <article class="ten wide column">
-            <h4>MyTweet users: {{users.length}}</h4>
         <form class="ui form" action="/deleteUser" method="POST">
             <table class="ui selectable striped table segment">
                 <thead>

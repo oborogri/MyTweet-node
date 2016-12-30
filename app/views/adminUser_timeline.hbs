@@ -4,8 +4,13 @@
 
     {{> timeline }}
     <script>
-        document.getElementById("delete_tweet").setAttribute('disabled', 'disabled');
-        document.getElementById("delete_all").setAttribute('disabled', 'disabled');
+        document.getElementById("delete_tweet").style.display = "none";
+        document.getElementById("delete_all").style.display = "none";
+        document.getElementById("or").style.display = "none";
+        document.getElementById("stats").style.display = "none";
+        document.getElementById("checkbox").setAttribute('disabled', 'disabled');
+    </script>
+    <script>
     {{#each tweets}}
         document.getElementById("senderEmail").setAttribute('disabled', 'disabled');
         document.getElementById("checkbox").setAttribute('disabled', 'disabled');
