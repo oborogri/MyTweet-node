@@ -22,16 +22,16 @@ exports.home = {
     var stats = new Object();
     now = new Date();
 
-    //finds total tweets count
-    Tweet.count({ }, function (err, tweets) {
-      stats.posts = tweets;
-    });
-
     const userEmail = request.auth.credentials.loggedInUser;
     User.findOne({ email: userEmail }).then(user => {
       const userId = user.id;//finds loggedInUser id
       stats.firstName = user.firstName;
       stats.lastName = user.lastName;
+
+      //finds user's total tweets count
+      Tweet.count({ sender: userId }, function (err, tweets) {
+        stats.posts = tweets;
+      });
 
       //finds all user's following count for statistics
       Friendship.count({ sourceUser: userId }, function (err, following) {
@@ -114,6 +114,16 @@ exports.user_timeline = {
       const userId = user.id;
       stats.firstName = user.firstName;
       stats.lastName = user.lastName;
+
+      //finds user's total tweets count
+      Tweet.count({ sender: userId }, function (err, tweets) {
+        stats.posts = tweets;
+      });
+
+      //finds all user's following count for statistics
+      Friendship.count({ sourceUser: userId }, function (err, following) {
+        stats.following = following;
+      });
 
       return Tweet.find({ sender: userId }).populate('sender');
     }).then(allTweets => {
