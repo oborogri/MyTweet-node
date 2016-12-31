@@ -8,8 +8,18 @@ Find all tweets
  */
 exports.findAllTweets = {
 
+  //route guarded with jwt
   auth: {
     strategy: 'jwt',
+  },
+
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
   },
 
   handler: function (request, reply) {
@@ -30,6 +40,15 @@ exports.findUsersTweets = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
+
   handler: function (request, reply) {
     Tweet.find({ sender: request.params.id }).then(tweets => {
       reply(tweets);
@@ -47,6 +66,15 @@ exports.findOne = {
 
   auth: {
     strategy: 'jwt',
+  },
+
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
   },
 
   handler: function (request, reply) {
@@ -72,6 +100,15 @@ exports.deleteOneTweet = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
+
   handler: function (request, reply) {
     Tweet.remove({ _id: request.params.id }).then(tweet => {
       reply(tweet).code(204);
@@ -88,6 +125,15 @@ exports.createTweet = {
 
   auth: {
     strategy: 'jwt',
+  },
+
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
   },
 
   handler: function (request, reply) {
@@ -111,6 +157,15 @@ exports.deleteAllTweets = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
+
   handler: function (request, reply) {
     Tweet.remove({}).then(err => {
       reply().code(204);
@@ -129,6 +184,15 @@ exports.deleteUsersTweets = {
 
   auth: {
     strategy: 'jwt',
+  },
+
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
   },
 
   handler: function (request, reply) {

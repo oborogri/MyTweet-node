@@ -13,6 +13,14 @@ exports.find = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     Friendship.find({})
         .populate('sourceUser')
@@ -33,6 +41,14 @@ exports.findOne = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     Friendship.findOne({ _id: request.params.id }).then(friendship => {
       if (friendship != null) {
@@ -56,6 +72,14 @@ exports.userFollowing = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     Friendship.find({ sourceUser: request.params.id }).then(friendships => {
       reply(friendships);
@@ -75,6 +99,14 @@ exports.userFollowers = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     Friendship.find({ targetUser: request.params.id }).then(friendships => {
       reply(friendships);
@@ -94,6 +126,14 @@ exports.deleteOne = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     Friendship.remove({ _id: request.params.id }).then(friendship => {
       reply(friendship).code(204);
@@ -112,6 +152,14 @@ exports.deleteUserFollowing = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     Friendship.remove({ sourceUser: request.params.id }).then(friendships => {
       reply(friendships).code(204);
@@ -130,6 +178,14 @@ exports.deleteUserFollowers = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     Friendship.remove({ targetUser: request.params.id }).then(friendships => {
       reply(friendships).code(204);
@@ -148,6 +204,14 @@ exports.deleteAll = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     Friendship.remove({}).then(err => {
       reply().code(204);

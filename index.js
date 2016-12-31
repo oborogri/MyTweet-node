@@ -28,6 +28,21 @@ server.register([require('inert'), require('vision'), require('hapi-auth-cookie'
     isCached: false,
   });
 
+  //registering disinfect module
+  server.register({
+    register: require('disinfect'),
+    options: {
+      disinfectQuery: true,
+      disinfectParams: true,
+      disinfectPayload: true,
+    },
+  }, (err) => {
+    if (err) {
+      throw err;
+    }
+  });
+
+  //server default authentication strategy
   server.auth.strategy('standard', 'cookie', {
     password: 'secretpasswordnotrevealedtoanyone',
     cookie: 'mytweet-cookie',
@@ -36,7 +51,6 @@ server.register([require('inert'), require('vision'), require('hapi-auth-cookie'
     redirectTo: '/login',
   });
 
-  //server default authentication strategy
   server.auth.default({
     strategy: 'standard',
   });

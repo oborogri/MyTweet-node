@@ -35,13 +35,22 @@ Register new user
  */
 exports.register = {
   auth: false,
+
+  //payload data sanitized with disinfect module
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: true,
+      disinfectPayload: true,
+    },
+  },
   validate: {
 
     payload: {
       firstName: Joi.string().required(),
       lastName: Joi.string().required(),
       email: Joi.string().email().required(),
-      password: Joi.string().required(),
+      password: Joi.string().min(3).max(8).required(),
     },
 
     failAction: function (request, reply, source, error) {
@@ -79,6 +88,16 @@ User authentication
 exports.authenticate = {
   auth: false,
 
+  //data validated with disinfect module
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: true,
+      disinfectPayload: true,
+    },
+  },
+
+  //hapi validation with joy
   validate: {
 
     payload: {
@@ -152,11 +171,22 @@ exports.viewSettings = {
 Update user settings
  */
 exports.updateSettings = {
+
+  //payload validated with disinfect module
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: true,
+      disinfectPayload: true,
+    },
+  },
+
+  //hapi validation with joy
   validate: {
 
     payload: {
       email: Joi.string().email().required(),
-      password: Joi.string().required(),
+      password: Joi.string().min(3).max(8).required(),
     },
 
     failAction: function (request, reply, source, error) {

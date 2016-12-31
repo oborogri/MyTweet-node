@@ -24,6 +24,16 @@ exports.admin_login = {
 exports.admin_authenticate = {
   auth: false,
 
+  //disinfect payload data with disinfect module
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: true,
+      disinfectPayload: true,
+    },
+  },
+
+  //data payload validated with joy
   validate: {
 
     payload: {

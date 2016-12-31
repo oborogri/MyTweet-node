@@ -10,6 +10,16 @@ User authentication handler
 exports.authenticate = {
   //authentication route must remain unguarded to allow user login
   auth: false,
+
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
+
   handler: function (request, reply) {
     const user = request.payload;
     User.findOne({ email: user.email }).then(foundUser => {
@@ -34,6 +44,14 @@ exports.find = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     User.find({}).exec().then(users => {
       reply(users);
@@ -52,6 +70,14 @@ exports.findOne = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     User.findOne({ _id: request.params.id }).then(user => {
       if (user != null) {
@@ -75,6 +101,14 @@ exports.deleteOne = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     User.remove({ _id: request.params.id }).then(user => {
       reply(user).code(204);
@@ -93,6 +127,14 @@ exports.createUser = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     const user = new User(request.payload);
     user.save().then(newUser => {
@@ -113,6 +155,14 @@ exports.deleteAll = {
     strategy: 'jwt',
   },
 
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
   handler: function (request, reply) {
     User.remove({}).then(err => {
       reply().code(204);
