@@ -55,6 +55,7 @@ exports.register = {
       abortEarly: false,
     },
   },
+
   //password hashing handler
   handler: function (request, reply) {
     const user = new User(request.payload);
@@ -176,20 +177,24 @@ exports.updateSettings = {
 
     User.findOne({ email: loggedInUserEmail }).then(user => {
       user.email = editedUser.email;
-      user.password = editedUser.password;
       request.cookieAuth.clear();//clear session cookie for old user email
-      return user.save();
-    }).then(user => {
-      request.cookieAuth.set({
-        loggedIn: true, // set new cookie with updated email
-        loggedInUser: user.email,
+      const plaintextPassword = editedUser.password;
+      bcrypt.hash(plaintextPassword, null, null, function (err, hash) {
+        user.password = hash;
+        return user.save();
       });
-      reply.redirect('/home');
-    }).catch(err => {
-      reply.redirect('/');
-    });
-  },
 
+      return user.save();
+    }).then(newUser => {
+          request.cookieAuth.set({
+            loggedIn: true, // set new cookie with updated email
+            loggedInUser: newUser.email,
+          });
+          reply.redirect('/settings');
+        }).catch(err => {
+          reply.redirect('/');
+        });
+  },
 };
 
 /*
