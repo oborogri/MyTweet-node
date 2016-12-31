@@ -5,7 +5,7 @@
       "firstName": "Homer",
       "lastName": "Simpson",
       "email": "homer@simpson.com",
-      "password": "$2a$10$gilDX/.e5RQBQQxIY8aC.ezuKXVXkRk0CKcsx3fZCWQvpO4NptiyC",
+      "password": "$2a$10$f9L08na.5GaI9nJIj9fAq.jI5cCYkpA9WH0b.gAPoAYoaoOXRjr8C",
       "joined": "Wed, Nov 2nd, 2016",
       "followedBy": [],
       "following": []
@@ -14,7 +14,7 @@
       "firstName": "Marge",
       "lastName": "Simpson",
       "email": "marge@simpson.com",
-      "password": "$2a$10$p4xdJfxqrT2SRfrz0yE6Ru.eDDpZVGAJ01wPBH0bt13uq/qW7CSKa",
+      "password": "$2a$10$f9L08na.5GaI9nJIj9fAq.jI5cCYkpA9WH0b.gAPoAYoaoOXRjr8C",
       "joined": "Wed, Nov 2nd, 2016",
       "followedBy": [],
       "following": []
@@ -23,7 +23,7 @@
       "firstName": "Bart",
       "lastName": "Simpson",
       "email": "bart@simpson.com",
-      "password": "$2a$10$p4xdJfxqrT2SRfrz0yE6Ru.eDDpZVGAJ01wPBH0bt13uq/qW7CSKa",
+      "password": "$2a$10$f9L08na.5GaI9nJIj9fAq.jI5cCYkpA9WH0b.gAPoAYoaoOXRjr8C",
       "joined": "Thu, Nov 3rd, 2016",
       "followedBy": [],
       "following": []
@@ -32,7 +32,7 @@
       "firstName": "Lisa",
       "lastName": "Simpson",
       "email": "lisa@simpson.com",
-      "password": "secret",
+      "password": "$2a$10$f9L08na.5GaI9nJIj9fAq.jI5cCYkpA9WH0b.gAPoAYoaoOXRjr8C",
       "joined": "Thu, Nov 9th, 2016"
     }
   },
@@ -43,7 +43,7 @@
       "firstName": "Greg",
       "lastName": "Oboroceanu",
       "email": "admin@wit.ie",
-      "password": "adminkey"
+      "password": "$2a$10$Hh7WZPtlZ5O.3vAQKX.DiekDRpMpvmQNuJCt637QOHlhb1iZ3aHrC"
     }
   }
 }
