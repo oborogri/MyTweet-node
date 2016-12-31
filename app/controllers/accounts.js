@@ -4,10 +4,11 @@
 'use strict';
 
 const User = require('../models/user');
-const Admin = require('../models/admin');
 const Joi = require('joi');
 var dateFormat = require('dateformat');
 var now        = null;
+const bcrypt = require('bcrypt-nodejs');
+const saltRounds = 10;
 
 /*
 Renders MyTweet welcome page
@@ -54,14 +55,19 @@ exports.register = {
       abortEarly: false,
     },
   },
+  //password hashing handler
   handler: function (request, reply) {
     const user = new User(request.payload);
     now = new Date();
     user.joined = dateFormat(now, 'ddd, mmm dS, yyyy');
-    user.save().then(newUser => {
-      reply.redirect('/');
-    }).catch(err => {
-      reply.redirect('/');
+    const plaintextPassword = user.password;
+    bcrypt.hash(plaintextPassword, null, null, function (err, hash) {
+      user.password = hash;
+      return user.save().then(newUser => {
+        reply.redirect('/');
+      }).catch(err => {
+        reply.redirect('/');
+      });
     });
   },
 };
@@ -91,24 +97,23 @@ exports.authenticate = {
     },
   },
   handler: function (request, reply) {
-    const userEmail = request.payload.email;
-    const userPassword = request.payload.password;
-    User.findOne({ email: userEmail }).then(foundUser => {
-      if ((foundUser.email === userEmail) && (foundUser.password === userPassword)) {
-        request.cookieAuth.set({
-          loggedIn: true,
-          loggedInUser: userEmail,
-        });
+    const user = request.payload;
+    User.findOne({ email: user.email }).then(foundUser => {
+      //implementing sync comparison of 2 passwords
+      if (bcrypt.compareSync(user.password, foundUser.password)) {
+        request.cookieAuth.set(
+            {
+              loggedIn: true,
+              loggedInUser: user.email,
+            });
         reply.redirect('/home');
       } else {
-        console.log('Not a valid user!');
         reply.redirect('/');
       }
     }).catch(err => {
       reply.redirect('/');
     });
   },
-
 };
 
 /*
