@@ -9,9 +9,9 @@ const utils = require('./utils.js');
  */
 exports.find = {
 
-  /*auth: {
+  auth: {
     strategy: 'jwt',
-  },*/
+  },
 
   handler: function (request, reply) {
     Friendship.find({})
