@@ -2,15 +2,16 @@
 
 const Friendship = require('../models/friendship');
 const Boom = require('boom');
+const utils = require('./utils.js');
 
 /*
  Finds all friendships
  */
 exports.find = {
 
-  auth: {
+  /*auth: {
     strategy: 'jwt',
-  },
+  },*/
 
   handler: function (request, reply) {
     Friendship.find({})

@@ -4,36 +4,24 @@ const assert = require('chai').assert;
 const TweetService = require('./tweet-service');
 const fixtures = require('./fixtures.json');
 const utils = require('../app/api/utils.js');
-const _ = require('lodash');
 
-suite('User API tests', function () {
+suite('Auth API tests', function () {
 
   let users = fixtures.users;
-  let newUser = fixtures.newUser;
+  let tweets = fixtures.tweets;
 
   const tweetService = new TweetService(fixtures.tweetService);
 
-  beforeEach(function () {
-    tweetService.deleteAllUsers();
-  });
+  test('login-logout', function () {
+    var returnedTweets = tweetService.getTweets();
+    assert.isNull(returnedTweets);
 
-  afterEach(function () {
-    tweetService.deleteAllUsers();
-  });
+    const response = tweetService.login(users[0]);
+    returnedTweets = tweetService.getTweets();
+    assert.isNotNull(returnedTweets);
 
-  test('authenticate', function () {
-    const returnedUser = tweetService.createUser(newUser);
-    const response = tweetService.authenticate(returnedUser);
-    assert(response.success);
-    assert.isDefined(response.token);
-  });
-
-  test('verify Token', function () {
-    const returnedUser = tweetService.createUser(newUser);
-    const response = tweetService.authenticate(newUser);
-
-    const userInfo = utils.decodeToken(response.token);
-    assert.equal(userInfo.email, returnedUser.email);
-    assert.equal(userInfo.userId, returnedUser._id);
+    tweetService.logout();
+    returnedTweets = tweetService.getTweets();
+    assert.isNull(returnedTweets);
   });
 });

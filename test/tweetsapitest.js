@@ -7,25 +7,26 @@ const _ = require('lodash');
 
 suite('Tweet API tests', function () {
 
+  let users = fixtures.users;
   let tweets = fixtures.tweets;
   let newUser = fixtures.newUser;
 
   const tweetService = new TweetService(fixtures.tweetService);
 
   beforeEach(function () {
-    tweetService.deleteAllUsers();
+    tweetService.login(users[0]);
     tweetService.deleteAllTweets();
   });
 
   afterEach(function () {
-    tweetService.deleteAllUsers();
     tweetService.deleteAllTweets();
+    tweetService.logout();
   });
 
   test('create a tweet', function () {
     const returnedUser = tweetService.createUser(newUser);
     tweetService.createTweet(returnedUser._id, tweets[0]);
-    const returnedTweets = tweetService.getUsersTweets(returnedUser._id);
+    const returnedTweets = tweetService.getTweets(returnedUser._id);
     assert.equal(returnedTweets.length, 1);
     assert(_.some([returnedTweets[0]], tweets[0]), 'returned tweet must be a superset of tweet');
   });
@@ -36,22 +37,11 @@ suite('Tweet API tests', function () {
       tweetService.createTweet(returnedUser._id, tweets[i]);
     }
 
-    const returnedTweets = tweetService.getUsersTweets(returnedUser._id);
+    const returnedTweets = tweetService.getTweets(returnedUser._id);
     assert.equal(returnedTweets.length, tweets.length);
     for (var i = 0; i < tweets.length; i++) {
       assert(_.some([returnedTweets[i]], tweets[i]), 'returned tweet must be a superset of tweet');
     }
-  });
-
-  test('delete user tweets', function () {
-    const returnedUser = tweetService.createUser(newUser);
-    for (var i = 0; i < tweets.length; i++) {
-      tweetService.createTweet(returnedUser._id, tweets[i]);
-    }
-
-    tweetService.deleteUsersTweets(returnedUser._id);
-    const t = tweetService.getTweets(returnedUser._id);
-    assert.equal(t.length, 0);
   });
 
   test('delete all tweets', function () {
@@ -60,10 +50,21 @@ suite('Tweet API tests', function () {
       tweetService.createTweet(returnedUser._id, tweets[i]);
     }
 
-    const t1 = tweetService.getUsersTweets(returnedUser._id);
-    assert.equal(t1.length, tweets.length);
+    const d1 = tweetService.getTweets(returnedUser._id);
+    assert.equal(d1.length, tweets.length);
     tweetService.deleteAllTweets();
-    const t2 = tweetService.getUsersTweets(returnedUser._id);
-    assert.equal(t2.length, 0);
+    const d2 = tweetService.getTweets(returnedUser._id);
+    assert.equal(d2.length, 0);
+  });
+
+  test('delete tweets', function () {
+    const returnedUser = tweetService.createUser(newUser);
+    for (var i = 0; i < tweets.length; i++) {
+      tweetService.createTweet(returnedUser._id, tweets[i]);
+    }
+
+    tweetService.deleteAllTweets(returnedUser._id);
+    const d = tweetService.getTweets(returnedUser._id);
+    assert.equal(d.length, 0);
   });
 });

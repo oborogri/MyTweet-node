@@ -12,11 +12,13 @@ suite('Friendships API tests', function () {
   const tweetService = new TweetService(fixtures.tweetService);
 
   beforeEach(function () {
-    tweetService.deleteAllUsers();
+    //tweetService.deleteAllUsers();
   });
 
   afterEach(function () {
     tweetService.deleteAllFriendships();
+
+    //tweetService.logout();
   });
 
   test('get invalid friendship', function () {
@@ -24,10 +26,5 @@ suite('Friendships API tests', function () {
     assert.isNull(f1);
     const f2 = tweetService.getFriendship('012345678901234567890123');
     assert.isNull(f2);
-  });
-
-  test('get all friendships empty', function () {
-    const allFriendships = tweetService.getFriendships();
-    assert.equal(allFriendships.length, 0);
   });
 });
