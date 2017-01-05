@@ -13,7 +13,7 @@ module.exports = [
   { method: 'DELETE', path:  '/api/tweets/{id}',      config: TweetsApi.deleteOneTweet },
   { method: 'DELETE', path: '/api/users/{id}/tweets', config: TweetsApi.deleteUsersTweets },
 
-  { method: 'POST', path: '/api/users/{id}/tweets',   config: TweetsApi.createTweet },
+  { method: 'POST', path: '/api/tweets',             config: TweetsApi.createTweet },
 
     //users api
   { method: 'GET', path:     '/api/users',        config: UsersApi.find },

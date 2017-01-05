@@ -3,27 +3,20 @@
 const User = require('../models/user');
 const Boom = require('boom');
 const utils = require('./utils.js');
+const bcrypt = require('bcrypt-nodejs');
+const Joi = require('joi');
 
 /*
-User authentication handler
+ User authentication handler
  */
 exports.authenticate = {
   //authentication route must remain unguarded to allow user login
   auth: false,
-
-  //disinfect the api query
-  plugins: {
-    disinfect: {
-      disinfectQuery: true,
-      disinfectParams: false,
-      disinfectPayload: true,
-    },
-  },
-
   handler: function (request, reply) {
     const user = request.payload;
     User.findOne({ email: user.email }).then(foundUser => {
-      if (foundUser && foundUser.password === user.password) {
+      //implementing sync comparison of 2 passwords
+      if (bcrypt.compareSync(user.password, foundUser.password)) {
         const token = utils.createToken(foundUser);
         reply({ success: true, token: token }).code(201);
       } else {
@@ -36,7 +29,7 @@ exports.authenticate = {
 };
 
 /*
-Find all users
+ Find all users
  */
 exports.find = {
 
@@ -44,14 +37,6 @@ exports.find = {
     strategy: 'jwt',
   },
 
-  //disinfect the api query
-  plugins: {
-    disinfect: {
-      disinfectQuery: true,
-      disinfectParams: false,
-      disinfectPayload: true,
-    },
-  },
   handler: function (request, reply) {
     User.find({}).exec().then(users => {
       reply(users);
@@ -62,7 +47,7 @@ exports.find = {
 };
 
 /*
-Find one user by _id
+ Find one user by _id
  */
 exports.findOne = {
 
@@ -70,14 +55,6 @@ exports.findOne = {
     strategy: 'jwt',
   },
 
-  //disinfect the api query
-  plugins: {
-    disinfect: {
-      disinfectQuery: true,
-      disinfectParams: false,
-      disinfectPayload: true,
-    },
-  },
   handler: function (request, reply) {
     User.findOne({ _id: request.params.id }).then(user => {
       if (user != null) {
@@ -93,7 +70,7 @@ exports.findOne = {
 };
 
 /*
-Delete one user with specific _id
+ Delete one user with specific _id
  */
 exports.deleteOne = {
 
@@ -101,14 +78,6 @@ exports.deleteOne = {
     strategy: 'jwt',
   },
 
-  //disinfect the api query
-  plugins: {
-    disinfect: {
-      disinfectQuery: true,
-      disinfectParams: false,
-      disinfectPayload: true,
-    },
-  },
   handler: function (request, reply) {
     User.remove({ _id: request.params.id }).then(user => {
       reply(user).code(204);
@@ -119,7 +88,7 @@ exports.deleteOne = {
 };
 
 /*
-Create new user
+ Create new user
  */
 exports.createUser = {
 
@@ -127,27 +96,30 @@ exports.createUser = {
     strategy: 'jwt',
   },
 
-  //disinfect the api query
   plugins: {
     disinfect: {
-      disinfectQuery: true,
+      disinfectQuery: false,
       disinfectParams: false,
-      disinfectPayload: true,
+      disinfectPayload: false,
     },
   },
+
   handler: function (request, reply) {
     const user = new User(request.payload);
-    user.save().then(newUser => {
-      reply(newUser).code(201);
-    }).catch(err => {
-      reply(Boom.badImplementation('error creating User'));
+    const plaintextPassword = user.password;
+    bcrypt.hash(plaintextPassword, null, null, function (err, hash) {
+      user.password = hash;
+      return user.save().then(newUser => {
+        reply(newUser).code(201);
+      }).catch(err => {
+        reply(Boom.badImplementation('error creating User'));
+      });
     });
   },
-
 };
 
 /*
-Delete all users
+ Delete all users
  */
 exports.deleteAll = {
 
@@ -155,14 +127,6 @@ exports.deleteAll = {
     strategy: 'jwt',
   },
 
-  //disinfect the api query
-  plugins: {
-    disinfect: {
-      disinfectQuery: true,
-      disinfectParams: false,
-      disinfectPayload: true,
-    },
-  },
   handler: function (request, reply) {
     User.remove({}).then(err => {
       reply().code(204);

@@ -16,19 +16,7 @@ server.register([require('inert'), require('vision'), require('hapi-auth-cookie'
     throw err;
   }
 
-  server.views({
-    engines: {
-      hbs: require('handlebars'),
-    },
-    relativeTo: __dirname,
-    path: './app/views',
-    layoutPath: './app/views/layout',
-    partialsPath: './app/views/partials',
-    layout: true,
-    isCached: false,
-  });
-
-  //registering disinfect module
+ /* //registering disinfect module
   server.register({
     register: require('disinfect'),
     options: {
@@ -40,6 +28,18 @@ server.register([require('inert'), require('vision'), require('hapi-auth-cookie'
     if (err) {
       throw err;
     }
+  });*/
+
+  server.views({
+    engines: {
+      hbs: require('handlebars'),
+    },
+    relativeTo: __dirname,
+    path: './app/views',
+    layoutPath: './app/views/layout',
+    partialsPath: './app/views/partials',
+    layout: true,
+    isCached: false,
   });
 
   //server default authentication strategy

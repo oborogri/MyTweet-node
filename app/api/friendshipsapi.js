@@ -221,3 +221,37 @@ exports.deleteAll = {
   },
 
 };
+
+/*
+ Create user following
+ */
+exports.createUserFollowing = {
+
+  auth: {
+    strategy: 'jwt',
+  },
+
+  //disinfect the api query
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: false,
+      disinfectPayload: true,
+    },
+  },
+  handler: function (request, reply) {
+    const userEmail = request.auth.credentials.loggedInUser;
+    User.findOne({ email: userEmail }).then(foundUser => {
+      const mainUserId = foundUser.id;
+      const secondUserId = request.payload.id;
+      const friendship = new Friendship();
+      friendship.sourceUser = mainUserId;
+      friendship.targetUser = secondUserId;
+      friendship.save();
+      reply(newFriendship).code(201);
+    }).catch(err => {
+      reply(Boom.badImplementation('error creating User'));
+    });
+  },
+
+};

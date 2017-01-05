@@ -154,28 +154,29 @@ Creates and posts a new tweet to the timeline
  */
 exports.posttweet = {
 
-  validate: {
+  /*  validate: {
 
-    payload: {
-      text: Joi.string().required(),
-    },
+      payload: {
+        text:    Joi.string().required(),
+        picture: Joi.binary().optional(),
+      },
 
-    options: {
-      abortEarly: false,
-    },
+      options: {
+        abortEarly: false,
+      },
 
-    failAction: function (request, reply, source, error) {
-      Tweet.find({}).then(tweetsAll => {
-        reply.view('newtweet', {
-          title: 'Message can\'t be blanc!',
-          tweets: tweetsAll,
-          errors: error.data.details,
-        }).code(400);
-      }).catch(err => {
-        reply.redirect('/home');
-      });
-    },
-  },
+      failAction: function (request, reply, source, error) {
+        Tweet.find({}).then(tweetsAll => {
+          reply.view('newtweet', {
+            title: 'Message can\'t be blanc!',
+            tweets: tweetsAll,
+            errors: error.data.details,
+          }).code(400);
+        }).catch(err => {
+          reply.redirect('/home');
+        });
+      },
+    },*/
 
   handler: function (request, reply) {
     const userEmail = request.auth.credentials.loggedInUser;
@@ -183,9 +184,10 @@ exports.posttweet = {
     now = new Date();
     tweet.date = dateFormat(now, 'ddd, mmm dS, yyyy, h:MM:ss TT');
 
-    //guard against null exception
-    if (request.payload.text == '') {
-      tweet.text = 'null';
+    //attach a picture if exists
+    if (request.payload.picture.length) {
+      tweet.picture.data = request.payload.picture;
+      tweet.picture.contentType = 'jpg';
     }
 
     User.findOne({ email: userEmail }).then(foundUser=> {
@@ -194,7 +196,7 @@ exports.posttweet = {
       foundUser.save();
       tweet.sender = foundUser.id;
       tweet.save();
-    }).then(NewTweet => {
+    }).then(response => {
       reply.redirect('/home');
     }).catch(err => {
       reply.redirect('/');
@@ -238,7 +240,7 @@ exports.postcomment = {
 
     //guard against null exception
     if (request.payload.text == '') {
-      tweet.text = 'null';
+      tweet.text = 'no text';
     }
 
     User.findOne({ email: userEmail }).then(foundUser=> {
@@ -292,21 +294,34 @@ exports.deleteTweet = {
  Facilitates deleting a specific users all tweets
  */
 exports.userDeleteTweetsAll = {
+      handler: function (request, reply) {
+        const userEmail = request.auth.credentials.loggedInUser;
+        User.findOne({ email: userEmail }).then(user => {
+          const userId = user.id;
+          user.posts = [];//clearing user posts list
+          user.save();
+          return Tweet.remove({ sender: userId });
+        }).then(response => {
+          reply.view('home', {
+            title: 'MyTweet Home',
+            _id: 'home',
+          });
+        }).catch(err => {
+          reply.redirect('/');
+        });
+      },
+    };
+
+/*
+ * To get images within tweets
+ */
+exports.getPicture = {
   handler: function (request, reply) {
-    const userEmail = request.auth.credentials.loggedInUser;
-    User.findOne({ email: userEmail }).then(user => {
-      const userId = user.id;
-      user.posts = [];//clearing user posts list
-      user.save();
-      return Tweet.remove({ sender: userId });
-    }).then(response => {
-      reply.view('home', {
-        title: 'MyTweet Home',
-        _id: 'home',
-      });
-    }).catch(err => {
-      reply.redirect('/');
+    let tweetId = request.params.id;
+    Tweet.findOne({ _id: tweetId }).exec((err, tweet) => {
+      if (tweet.picture.data) {
+        reply(tweet.picture.data).type('image');
+      }
     });
   },
 };
-

@@ -64,6 +64,11 @@
                                             <div class="text">
                                                 {{text}}
                                             </div>
+                                            {{#if picture.data}}
+                                                <div class="tweet_content">
+                                                    <img src="/getPicture/{{_id}}" height="52" width="52" />
+                                                </div>
+                                            {{/if}}
                                         </div>
                                     </div>
                                 </div>

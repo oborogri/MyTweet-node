@@ -10,6 +10,7 @@ suite('Tweet API tests', function () {
   let users = fixtures.users;
   let tweets = fixtures.tweets;
   let newUser = fixtures.newUser;
+  let newTweet = fixtures.newTweet;
 
   const tweetService = new TweetService(fixtures.tweetService);
 
@@ -24,9 +25,8 @@ suite('Tweet API tests', function () {
   });
 
   test('create a tweet', function () {
-    const returnedUser = tweetService.createUser(newUser);
-    tweetService.createTweet(returnedUser._id, tweets[0]);
-    const returnedTweets = tweetService.getTweets(returnedUser._id);
+    tweetService.createTweet(newTweet);
+    const returnedTweets = tweetService.getTweets();
     assert.equal(returnedTweets.length, 1);
     assert(_.some([returnedTweets[0]], tweets[0]), 'returned tweet must be a superset of tweet');
   });

@@ -7,6 +7,7 @@ const User = require('../models/user');
 const tweetSchema = mongoose.Schema({
   text:    String,
   date:    String,
+  picture: { data: Buffer, contentType: String },
 
   sender: {
     type: mongoose.Schema.Types.ObjectId,

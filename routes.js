@@ -21,9 +21,10 @@ module.exports = [
   { method: 'POST', path: '/upload_picture',  config: Accounts.upload_picture },
 
     //Tweets
-  { method: 'GET', path: '/home',            config: Tweets.home },
-  { method: 'GET', path: '/global_timeline', config: Tweets.global_timeline },
-  { method: 'GET', path: '/newtweet',        config: Tweets.newtweet },
+  { method: 'GET', path: '/home',                  config: Tweets.home },
+  { method: 'GET', path: '/global_timeline',       config: Tweets.global_timeline },
+  { method: 'GET', path: '/newtweet',              config: Tweets.newtweet },
+  { method: 'GET', path: '/getPicture/{id}', config: Tweets.getPicture },
 
   { method: 'POST', path: '/user_timeline',       config: Tweets.user_timeline },
   { method: 'POST', path: '/posttweet',           config: Tweets.posttweet },

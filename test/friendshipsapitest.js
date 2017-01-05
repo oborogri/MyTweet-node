@@ -7,18 +7,30 @@ const _ = require('lodash');
 
 suite('Friendships API tests', function () {
 
-  let friendships = fixtures.friendships;
+  let users = fixtures.users;
+  let tweets = fixtures.tweets;
+  let newUser = fixtures.newUser;
 
   const tweetService = new TweetService(fixtures.tweetService);
 
   beforeEach(function () {
-    //tweetService.deleteAllUsers();
+    tweetService.login(users[0]);
+    tweetService.deleteAllFriendships();
   });
 
   afterEach(function () {
     tweetService.deleteAllFriendships();
+    tweetService.logout();
+  });
 
-    //tweetService.logout();
+  test('create a following', function () {
+    const returnedUser1 = tweetService.createUser(newUser);
+    const returnedUser2 = tweetService.createUser(newUser);
+    tweetService.createUserFollowing(returnedUser1._id, returnedUser2._id);
+    const returnedFriendships = tweetService.getUserFollowing(returnedUser1._id);
+    assert.equal(returnedFriendships.length, 1);
+
+    //assert(_.some([returnedFriendships[0]], friendships[0]), 'returned frindship must be a superset of friendship');
   });
 
   test('get invalid friendship', function () {

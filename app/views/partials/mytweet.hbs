@@ -7,9 +7,13 @@
         </div>
         <div class="ui form ten wide column">
             <h5>Enter text here 140 characters max</h5>
-            <form action="/posttweet" method="POST">
+            <form enctype="multipart/form-data" action="/posttweet" method="POST">
                 <div class="field">
                     <textarea maxlength="140" name="text" id="text" placeholder="What's on your mind?"></textarea>
+                </div>
+                <div class="ui field">
+                    <h5>Upload an image here up to 1 Mbyte</h5>
+                    <input id="content" type="file" name="picture"><!-- textarea placeholder="Add file" -->
                 </div>
                 <button class="ui grey submit button"><i class="twitter icon"></i>Post</button>
             </form>

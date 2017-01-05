@@ -18,8 +18,8 @@ class TweetService {
     return this.httpService.get('/api/tweets/' + id);
   }
 
-  createTweet(id, tweet) {
-    return this.httpService.post('/api/users/' + id + '/tweets', tweet);
+  createTweet(tweet) {
+    return this.httpService.post('/api/tweets', tweet);
   }
 
   getUsersTweets(id) {
@@ -76,8 +76,8 @@ class TweetService {
     return this.httpService.get('/api/friendships/' + id);
   }
 
-  createFriendship(id, friendship) {
-    return this.httpService.post('/api/friendships/' + id + '/tweets', tweet);
+  createUserFollowing(id1, id2) {
+    return this.httpService.post('/api/users/' + id1 + '/following', id2);
   }
 
   getUserFollowing(id) {

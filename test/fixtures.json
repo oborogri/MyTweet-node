@@ -31,7 +31,7 @@
       "followedBy": [],
       "following": []
     }
-    ],
+  ],
   "friendships": [
     {
       "sourceUser": [],
@@ -42,12 +42,14 @@
   "tweets": [
     {
       "text": "What are you up to?",
-      "date": "Wed, Nov 2nd, 2016, 9:45:03 PM"
+      "date": "Wed, Nov 2nd, 2016, 9:45:03 PM",
+      "sender": []
     },
 
     {
       "text": "I'm just back from work?",
-      "date": "Wed, Nov 2nd, 2016, 9:49:07 PM"
+      "date": "Wed, Nov 2nd, 2016, 9:49:07 PM",
+      "sender": []
     }
   ],
 

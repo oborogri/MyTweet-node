@@ -2,7 +2,7 @@
 
 const Tweet = require('../models/tweet');
 const Boom = require('boom');
-
+const utils = require('./utils.js');
 /*
 Find all tweets
  */
@@ -127,19 +127,23 @@ exports.createTweet = {
     strategy: 'jwt',
   },
 
-  //disinfect the api query
+  //cancel disinfect the api query
   plugins: {
     disinfect: {
-      disinfectQuery: true,
+      disinfectQuery: false,
       disinfectParams: false,
-      disinfectPayload: true,
+      disinfectPayload: false,
     },
   },
 
   handler: function (request, reply) {
     const tweet = new Tweet(request.payload);
+    const authorization = request.headers;
     tweet.sender = request.params.id;
+    tweet.sender = utils.getUserIdFromRequest(request);
     tweet.save().then(newTweet => {
+      return Tweet.findOne({ newTweet }).populate('sender');
+    }).then(newTweet => {
       reply(newTweet).code(201);
     }).catch(err => {
       reply(Boom.badImplementation('error creating tweet'));

@@ -25,7 +25,9 @@ suite('User API tests', function () {
 
   test('create a user', function () {
     const returnedUser = tweetService.createUser(newUser);
-    assert(_.some([returnedUser], newUser), 'returnedUser must be a superset of newUser');
+    assert.equal(returnedUser.firstName, newUser.firstName);
+    assert.equal(returnedUser.lastName, newUser.lastName);
+    assert.equal(returnedUser.office, newUser.office);
     assert.isDefined(returnedUser._id);
   });
 
@@ -48,25 +50,4 @@ suite('User API tests', function () {
     tweetService.deleteOneUser(u._id);
     assert(tweetService.getUser(u._id) == null);
   });
-
-  /*test('get all users', function () {
-    for (let u of users) {
-      tweetService.createUser(u);
-    }
-
-    const allUsers = tweetService.getUsers();
-    assert.equal(allUsers.length, users.length);
-  });*/
-
-  /* test('get users detail', function () {
-     for (let u of users) {
-       tweetService.createUser(u);
-     }
-
-     const allUsers = tweetService.getUsers();
-     for (var i = 0; i < users.length; i++) {
-       assert(_.some([allUsers[i]], users[i]), 'returnedUser must be a superset of newUser');
-     }
-   });*/
-
 });
