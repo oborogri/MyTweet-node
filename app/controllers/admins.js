@@ -224,7 +224,7 @@ exports.userslist = {
     now = new Date();
 
     //finds new users in the past week
-    User.count({ date: { $gt: now.getTime() - 7 * 24 * 60 * 60 } }, function (err, users) {
+    User.count({ joined: { $gt: now.getTime() - 1000 * 60 * 60 * 24 * 7 } }, function (err, users) {
       stats.usersWeek = users;
     });
 
