@@ -11,6 +11,7 @@ const userSchema = mongoose.Schema({
   email: String,
   password: String,
   joined: String,
+  picture: { data: Buffer, contentType: String },
   followedBy: [],
   following: [],
   posts: [{

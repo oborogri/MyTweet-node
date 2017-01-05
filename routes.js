@@ -15,16 +15,17 @@ module.exports = [
   { method: 'GET', path: '/logout',       config: Accounts.logout },
   { method: 'GET', path: '/settings',     config: Accounts.viewSettings },
 
-  { method: 'POST', path: '/register',        config: Accounts.register },
-  { method: 'POST', path: '/authenticate',    config: Accounts.authenticate },
-  { method: 'POST', path: '/update_settings', config: Accounts.updateSettings },
-  { method: 'POST', path: '/upload_picture',  config: Accounts.upload_picture },
+  { method: 'POST', path: '/register',           config: Accounts.register },
+  { method: 'POST', path: '/authenticate',       config: Accounts.authenticate },
+  { method: 'POST', path: '/update_settings',    config: Accounts.updateSettings },
+  { method: 'POST', path: '/profile_picture',    config: Accounts.profile_picture },
+  { method: 'GET', path: '/getUserPicture/{id}', config: Accounts.getUserPicture },
 
     //Tweets
   { method: 'GET', path: '/home',                  config: Tweets.home },
   { method: 'GET', path: '/global_timeline',       config: Tweets.global_timeline },
   { method: 'GET', path: '/newtweet',              config: Tweets.newtweet },
-  { method: 'GET', path: '/getPicture/{id}', config: Tweets.getPicture },
+  { method: 'GET', path: '/getPicture/{id}',       config: Tweets.getPicture },
 
   { method: 'POST', path: '/user_timeline',       config: Tweets.user_timeline },
   { method: 'POST', path: '/posttweet',           config: Tweets.posttweet },

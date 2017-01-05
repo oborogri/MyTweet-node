@@ -5,19 +5,22 @@
         <div class="ui six wide column">
             <div class="ui grid">
                 <div class="ui card">
-                    <div class="image">
-                        <img src="/images/{{user.firstName}}.jpg">
+                        {{#if user.picture.data}}
+                            <div class="image">
+                                <img src="/getUserPicture/{{user.id}}" height="200" width="100" />
+                            </div>
+                        {{/if}}
                     </div>
                     <div class="extra content">
-                        <a>Update profile picture</a>
-                        <form method="POST" action="/" ectype="multipart/form-data">
-                            <input type="file" name="file"/>
-                            <br/> <input type="submit" value="Upload"/>
+                        <h5>Upload profile picture up to 1 Mb</h5>
+                        <form method="post" enctype="multipart/form-data" action="/profile_picture">
+                            <input type="file" name="file">
+                            <input type="submit" value="Upload">
                         </form>
+                        {{> formerror }}
                     </div>
                 </div>
             </div>
-        </div>
         <div class="ui ten wide column">
             <div class="ui stacked form segment">
                 <form action="/update_settings" method="POST">
@@ -59,8 +62,12 @@
                                 </td>
                                 <td></td>
                                 <td>
-                                    <img class="ui avatar image" src="/images/{{firstName}}.jpg">
-                                    <span>{{firstName}} {{lastName}}</span>
+                                    {{#if picture.data}}
+                                    <a class="avatar">
+                                        <img src="/getUserPicture/{{_id}}" class="ui mini circular inline image">
+                                        <span></span>
+                                    </a>
+                                    {{/if}}
                                 </td>
                                 <td>
                                     <button class="ui basic small button" formaction="/user_timeline" name="email"

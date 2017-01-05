@@ -1,7 +1,7 @@
 <section class="ui raised segment">
     <div class="ui grid">
         <asside class="six wide column">
-            <img src="images/timeline.jpg" class="ui medium image">
+            <img src="images/timeline.png" class="ui medium image">
         </asside>
         <article class="ten wide column">
             <h4>Home timeline</h4>
@@ -46,9 +46,11 @@
                             <td>
                                 <div class="ui comments">
                                     <div class="comment">
+                                        {{#if sender.picture.data}}
                                         <a class="avatar">
-                                            <img src="/images/{{sender.firstName}}.jpg" class="ui circular inline image">
+                                            <img src="/getUserPicture/{{sender.id}}" class="ui circular inline image">
                                             <span></span>
+                                        {{/if}}
                                         </a>
                                         <div class="content">
                                             <div class="author">

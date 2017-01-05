@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </div>
-            <img src="images/admintimeline.jpg" class="ui large image">
+            <img src="images/admintimeline.png" class="ui large image">
         </asside>
         <article class="ten wide column">
              <form class="ui form" action="/adminDeleteTweet" method="POST">
@@ -41,10 +41,11 @@
                             <td>
                                 <div class="ui comments">
                                     <div class="comment">
+                                        {{#if sender.picture.data}}
                                         <a class="avatar">
-                                            <img src="/images/{{sender.firstName}}.jpg" class="ui circular inline image">
+                                            <img src="/getUserPicture/{{sender.id}}" class="ui circular inline image">
                                             <span></span>
-                                        </a>
+                                        {{/if}}
                                         <div class="content">
                                             <a class="author">
                                                 <button class="ui basic small button" id="senderEmail" formaction="/user_timeline" value="{{sender.email}}"

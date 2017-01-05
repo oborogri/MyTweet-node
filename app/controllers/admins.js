@@ -7,6 +7,7 @@ const Friendship = require('../models/friendship');
 const Joi = require('joi');
 var dateFormat = require('dateformat');
 var now        = null;
+const bcrypt = require('bcrypt-nodejs');
 
 /*
 Renders admin login page
@@ -78,7 +79,7 @@ exports.adminUser_timeline = {
     const userEmail = request.payload.email;
     User.findOne({ email: userEmail }).then(user => {
       const userId = user.id;
-      return Tweet.find({ sender: userId }).populate('sender');
+      return Tweet.find({ sender: userId }).sort({ date: 'asc' }).populate('sender');
     }).then(allTweets => {
       reply.view('adminUser_timeline', {
         title: 'User Timeline',
@@ -112,15 +113,15 @@ exports.user_profile = {
   },
 };
 
-/*
+/*/!*
 Renders admin signup page
- */
+ *!/
 exports.admin_signup = {
   auth: false,
   handler: function (request, reply) {
     reply.view('admin_signup', { title: 'Create MyTweet admin account' });
   },
-};
+};*/
 
 /*
 Renders global admin timeline
@@ -146,7 +147,7 @@ exports.admin_timeline = {
       stats.users = users;
     });
 
-    Tweet.find({}).populate('sender').then(allTweets => {
+    Tweet.find({}).populate('sender').sort({ date: 'asc' }).then(allTweets => {
       reply.view('admin_timeline', {
         title: 'MyTweet Timeline',
         tweets: allTweets,
@@ -237,7 +238,7 @@ exports.userslist = {
       stats.friendships = friendships;
     });
 
-    User.find({}).then(allUsers => {
+    User.find({}).sort({ date: 'asc' }).then(allUsers => {
       reply.view('userslist', {
         title: 'MyTweet Users',
         users: allUsers,
@@ -306,10 +307,14 @@ exports.register_user = {
     const user = new User(request.payload);
     now = new Date();
     user.joined = dateFormat(now, 'ddd, mmm dS, yyyy');
-    user.save().then(newUser => {
-      reply.redirect('/userslist');
-    }).catch(err => {
-      reply.redirect('/admin_timeline');
+    const plaintextPassword = user.password;
+    bcrypt.hash(plaintextPassword, null, null, function (err, hash) {
+      user.password = hash;
+      return user.save().then(newUser => {
+        reply.redirect('/userslist');
+      }).catch(err => {
+        reply.redirect('/admin_timeline');
+      });
     });
   },
 };

@@ -7,6 +7,7 @@
       "email": "homer@simpson.com",
       "password": "$2a$10$f9L08na.5GaI9nJIj9fAq.jI5cCYkpA9WH0b.gAPoAYoaoOXRjr8C",
       "joined": "Wed, Nov 2nd, 2016",
+      "picture": [],
       "followedBy": [],
       "following": []
     },
@@ -16,6 +17,7 @@
       "email": "marge@simpson.com",
       "password": "$2a$10$f9L08na.5GaI9nJIj9fAq.jI5cCYkpA9WH0b.gAPoAYoaoOXRjr8C",
       "joined": "Wed, Nov 2nd, 2016",
+      "picture": [],
       "followedBy": [],
       "following": []
     },

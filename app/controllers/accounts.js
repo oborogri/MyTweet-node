@@ -151,6 +151,7 @@ exports.logout = {
 Renders update settings page
  */
 exports.viewSettings = {
+
   handler: function (request, reply) {
     var userEmail = request.auth.credentials.loggedInUser;
     User.findOne({ email: userEmail }).populate('following').then(foundUser => {
@@ -171,15 +172,6 @@ exports.viewSettings = {
 Update user settings
  */
 exports.updateSettings = {
-
-  //payload validated with disinfect module
-  plugins: {
-    disinfect: {
-      disinfectQuery: true,
-      disinfectParams: true,
-      disinfectPayload: true,
-    },
-  },
 
   //hapi validation with joy
   validate: {
@@ -229,17 +221,61 @@ exports.updateSettings = {
 
 /*
 Upload user profile picture
-TO DO - implementation
  */
-exports.upload_picture = {
+exports.profile_picture = {
+
+  validate: {
+
+    payload: {
+
+      file: Joi.binary(),
+    },
+
+    options: {
+      abortEarly: false,
+    },
+  },
+
   handler: function (request, reply) {
-    var userEmail = request.auth.credentials.loggedInUser;
-    User.findOne({ email: userEmail }).populate('following').then(foundUser => {
-      let followersList = foundUser.followedBy;
-      let followingList = foundUser.following;
+    const userEmail = request.auth.credentials.loggedInUser;
+    let userImage = request.payload.file;
+
+    User.findOne({ email: userEmail }).then(foundUser => {
+      if (userImage.length) {
+        foundUser.picture.data = userImage;
+        foundUser.save();
+      }
+
       reply.redirect('/settings');
     }).catch(err => {
       reply.redirect('/');
+    });
+  },
+};
+
+/*}); //alternative reply with settings view reload
+        return User.findOne({ email: userEmail }).then(foundUser => {
+          let followersList = foundUser.followedBy;
+          let followingList = foundUser.following;
+          foundUser.save();
+          reply.view('settings',
+              { title: 'Edit Account Settings',
+                user: foundUser,
+                followers: followersList,
+                following: followingList, });
+        }).catch(err => {
+          reply.redirect('/');
+        });
+      },
+    };*/
+
+exports.getUserPicture = {
+  handler: function (request, reply) {
+    let userId = request.params.id;
+    User.findOne({ _id: userId }).exec((err, user) => {
+      if (user.picture.data) {
+        reply(user.picture.data).type('image');
+      }
     });
   },
 };

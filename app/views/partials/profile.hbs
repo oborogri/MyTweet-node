@@ -2,9 +2,11 @@
     <div class="ui two column grid">
         <div class="ui six wide column">
         <div class="ui card">
-            <div class="image">
-                <img src="/images/{{user.firstName}}.jpg">
-            </div>
+            {{#if user.picture.data}}
+                <div class="image">
+                    <img src="/getUserPicture/{{user.id}}" height="200" width="100" />
+                </div>
+            {{/if}}
             <div class="content">
                 <a> {{user.firstName}} {{user.lastName}}</a>
             </div>

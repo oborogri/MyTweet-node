@@ -48,7 +48,9 @@ exports.home = {
       return usersIdList;
     }).then(usersIdList => {
       console.log(usersIdList.length);
-      return Tweet.find({ sender: { $in: usersIdList } }).populate('sender');//finds tweets of all users in friendship
+
+      //finds tweets of all users in friendship
+      return Tweet.find({ sender: { $in: usersIdList } }).sort({ date: 'asc' }).populate('sender');
     }).then(allTweets => {
       reply.view('home', {
         title: 'MyTweet Home',
@@ -87,7 +89,7 @@ exports.global_timeline = {
       stats.users = users;
     });
 
-    Tweet.find({}).populate('sender').then(allTweets => {
+    Tweet.find({}).populate('sender').sort({ date: 'asc' }).then(allTweets => {
         reply.view('users_timeline', {
           title: 'MyTweet Timeline',
           tweets: allTweets,
@@ -125,7 +127,7 @@ exports.user_timeline = {
         stats.following = following;
       });
 
-      return Tweet.find({ sender: userId }).populate('sender');
+      return Tweet.find({ sender: userId }).sort({ date: 'asc' }).populate('sender');
     }).then(allTweets => {
       reply.view('user_timeline', {
         title: 'User Timeline',
@@ -153,30 +155,6 @@ exports.newtweet = {
 Creates and posts a new tweet to the timeline
  */
 exports.posttweet = {
-
-  /*  validate: {
-
-      payload: {
-        text:    Joi.string().required(),
-        picture: Joi.binary().optional(),
-      },
-
-      options: {
-        abortEarly: false,
-      },
-
-      failAction: function (request, reply, source, error) {
-        Tweet.find({}).then(tweetsAll => {
-          reply.view('newtweet', {
-            title: 'Message can\'t be blanc!',
-            tweets: tweetsAll,
-            errors: error.data.details,
-          }).code(400);
-        }).catch(err => {
-          reply.redirect('/home');
-        });
-      },
-    },*/
 
   handler: function (request, reply) {
     const userEmail = request.auth.credentials.loggedInUser;
@@ -313,7 +291,7 @@ exports.userDeleteTweetsAll = {
     };
 
 /*
- * To get images within tweets
+ * Helper method to get images rendering to html in tweets
  */
 exports.getPicture = {
   handler: function (request, reply) {
