@@ -18,8 +18,8 @@ class TweetService {
     return this.httpService.get('/api/tweets/' + id);
   }
 
-  createTweet(tweet) {
-    return this.httpService.post('/api/tweets', tweet);
+  createTweet(newTweet) {
+    return this.httpService.post('/api/tweets', newTweet);
   }
 
   getUsersTweets(id) {

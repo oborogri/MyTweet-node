@@ -7,9 +7,10 @@
       "email":     "homer@simpson.com",
       "password":  "secret",
       "joined":    "Wed, Nov 2nd, 2016",
-      "posts":      [],
+      "picture": {},
       "followedBy": [],
-      "following": []
+      "following": [],
+      "posts":      []
     },
     {
       "firstName": "Marge",
@@ -17,9 +18,10 @@
       "email":     "marge@simpson.com",
       "password":  "secret",
       "joined":    "Thur, Nov 3rd, 2016",
-      "posts":     [],
+      "picture": {},
       "following": [],
-      "followedBy": []
+      "followedBy": [],
+      "posts":     []
     },
     {
       "firstName": "Bart",
@@ -27,9 +29,10 @@
       "email":     "bart@simpson.com",
       "password":  "secret",
       "joined":    "Fri, Nov 4th, 2016",
-      "posts":      [],
+      "picture": {},
       "followedBy": [],
-      "following": []
+      "following": [],
+      "posts":      []
     }
   ],
   "friendships": [
@@ -43,13 +46,33 @@
     {
       "text": "What are you up to?",
       "date": "Wed, Nov 2nd, 2016, 9:45:03 PM",
-      "sender": []
+      "sender": {
+        "firstName": "Homer",
+        "lastName":  "Simpson",
+        "email":     "homer@simpson.com",
+        "password":  "secret",
+        "joined":    "Wed, Nov 2nd, 2016",
+        "picture": {},
+        "followedBy": [],
+        "following": [],
+        "posts":      []
+      }
     },
 
     {
       "text": "I'm just back from work?",
       "date": "Wed, Nov 2nd, 2016, 9:49:07 PM",
-      "sender": []
+      "sender": {
+        "firstName": "Marge",
+        "lastName":  "Simpson",
+        "email":     "marge@simpson.com",
+        "password":  "secret",
+        "joined":    "Thur, Nov 3rd, 2016",
+        "picture": {},
+        "following": [],
+        "followedBy": [],
+        "posts":     []
+      }
     }
   ],
 
@@ -60,9 +83,10 @@
     "email":     "barnie@grumble.com",
     "password":  "secret",
     "joined":    "Sat, Nov 5th, 2016",
-    "posts":      [],
+    "picture": {},
     "followedBy": [],
-    "following": []
+    "following": [],
+    "posts":      []
   },
 
   "newTweet":

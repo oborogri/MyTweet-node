@@ -13,15 +13,6 @@ exports.findAllTweets = {
     strategy: 'jwt',
   },
 
-  //disinfect the api query
-  plugins: {
-    disinfect: {
-      disinfectQuery: true,
-      disinfectParams: false,
-      disinfectPayload: true,
-    },
-  },
-
   handler: function (request, reply) {
     Tweet.find({}).populate('sender').then(tweets => {
       reply(tweets);
@@ -40,17 +31,8 @@ exports.findUsersTweets = {
     strategy: 'jwt',
   },
 
-  //disinfect the api query
-  plugins: {
-    disinfect: {
-      disinfectQuery: true,
-      disinfectParams: false,
-      disinfectPayload: true,
-    },
-  },
-
   handler: function (request, reply) {
-    Tweet.find({ sender: request.params.id }).then(tweets => {
+    Tweet.find({ sender: utils.getUserIdFromRequest(request) }).then(tweets => {
       reply(tweets);
     }).catch(err => {
       reply(Boom.badImplementation('error accessing db'));
@@ -68,17 +50,8 @@ exports.findOne = {
     strategy: 'jwt',
   },
 
-  //disinfect the api query
-  plugins: {
-    disinfect: {
-      disinfectQuery: true,
-      disinfectParams: false,
-      disinfectPayload: true,
-    },
-  },
-
   handler: function (request, reply) {
-    Tweet.findOne({ _id: request.params.id }).then(tweet => {
+    Tweet.findOne({ _id: utils.getUserIdFromRequest(request) }).then(tweet => {
       if (tweet != null) {
         reply(tweet);
       }
@@ -100,15 +73,6 @@ exports.deleteOneTweet = {
     strategy: 'jwt',
   },
 
-  //disinfect the api query
-  plugins: {
-    disinfect: {
-      disinfectQuery: true,
-      disinfectParams: false,
-      disinfectPayload: true,
-    },
-  },
-
   handler: function (request, reply) {
     Tweet.remove({ _id: request.params.id }).then(tweet => {
       reply(tweet).code(204);
@@ -127,23 +91,10 @@ exports.createTweet = {
     strategy: 'jwt',
   },
 
-  //cancel disinfect the api query
-  plugins: {
-    disinfect: {
-      disinfectQuery: false,
-      disinfectParams: false,
-      disinfectPayload: false,
-    },
-  },
-
   handler: function (request, reply) {
     const tweet = new Tweet(request.payload);
-    const authorization = request.headers;
-    tweet.sender = request.params.id;
     tweet.sender = utils.getUserIdFromRequest(request);
     tweet.save().then(newTweet => {
-      return Tweet.findOne({ newTweet }).populate('sender');
-    }).then(newTweet => {
       reply(newTweet).code(201);
     }).catch(err => {
       reply(Boom.badImplementation('error creating tweet'));
@@ -159,15 +110,6 @@ exports.deleteAllTweets = {
 
   auth: {
     strategy: 'jwt',
-  },
-
-  //disinfect the api query
-  plugins: {
-    disinfect: {
-      disinfectQuery: true,
-      disinfectParams: false,
-      disinfectPayload: true,
-    },
   },
 
   handler: function (request, reply) {
@@ -190,17 +132,8 @@ exports.deleteUsersTweets = {
     strategy: 'jwt',
   },
 
-  //disinfect the api query
-  plugins: {
-    disinfect: {
-      disinfectQuery: true,
-      disinfectParams: false,
-      disinfectPayload: true,
-    },
-  },
-
   handler: function (request, reply) {
-    Tweet.remove({ sender: request.params.id }).then(result => {
+    Tweet.remove({ sender: utils.getUserIdFromRequest(request) }).then(result => {
       reply().code(204);
     }).catch(err => {
       reply(Boom.badImplementation('error removing Tweets'));
