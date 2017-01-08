@@ -156,6 +156,33 @@ Creates and posts a new tweet to the timeline
  */
 exports.posttweet = {
 
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: true,
+      disinfectPayload: false,
+    },
+  },
+
+  validate: {
+
+    payload: {
+      text: Joi.string().required(),
+      picture: Joi,
+    },
+
+    failAction: function (request, reply, source, error) {
+      reply.view('newtweet', {
+        title: 'Tweet body can\'t be blanc',
+        errors: error.data.details,
+      }).code(400);
+    },
+
+    options: {
+      abortEarly: false,
+    },
+  },
+
   handler: function (request, reply) {
     const userEmail = request.auth.credentials.loggedInUser;
     let tweet = new Tweet(request.payload);

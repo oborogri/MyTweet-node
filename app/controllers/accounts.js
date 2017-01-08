@@ -173,6 +173,14 @@ Update user settings
  */
 exports.updateSettings = {
 
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: true,
+      disinfectPayload: true,
+    },
+  },
+
   //hapi validation with joy
   validate: {
 
@@ -223,6 +231,14 @@ exports.updateSettings = {
 Upload user profile picture
  */
 exports.profile_picture = {
+
+  plugins: {
+    disinfect: {
+      disinfectQuery: false,
+      disinfectParams: false,
+      disinfectPayload: false,
+    },
+  },
 
   validate: {
 

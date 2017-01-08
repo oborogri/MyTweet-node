@@ -12,6 +12,16 @@ const Joi = require('joi');
 exports.authenticate = {
   //authentication route must remain unguarded to allow user login
   auth: false,
+
+  //payload data sanitized with disinfect module
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: true,
+      disinfectPayload: true,
+    },
+  },
+
   handler: function (request, reply) {
     const user = request.payload;
     User.findOne({ email: user.email }).then(foundUser => {
@@ -98,7 +108,7 @@ exports.createUser = {
 
   plugins: {
     disinfect: {
-      disinfectQuery: false,
+      disinfectQuery: true,
       disinfectParams: false,
       disinfectPayload: false,
     },

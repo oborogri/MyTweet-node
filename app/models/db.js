@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-let dbURI = 'mongodb://mytweetuser:mytweetuser@ds145997.mlab.com:45997/gomytweet';
+let dbURI = 'mongodb://ec2-35-163-241-196.us-west-2.compute.amazonaws.com:27017';
 if (process.env.NODE_ENV === 'production') {
   dbURI = process.env.MONGOLAB_URI;
 }

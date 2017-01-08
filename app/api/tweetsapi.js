@@ -50,6 +50,15 @@ exports.findOne = {
     strategy: 'jwt',
   },
 
+  //payload data sanitized with disinfect module
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: true,
+      disinfectPayload: true,
+    },
+  },
+
   handler: function (request, reply) {
     Tweet.findOne({ _id: utils.getUserIdFromRequest(request) }).then(tweet => {
       if (tweet != null) {
@@ -89,6 +98,15 @@ exports.createTweet = {
 
   auth: {
     strategy: 'jwt',
+  },
+
+  //payload data sanitized with disinfect module
+  plugins: {
+    disinfect: {
+      disinfectQuery: true,
+      disinfectParams: true,
+      disinfectPayload: false,
+    },
   },
 
   handler: function (request, reply) {

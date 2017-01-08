@@ -16,7 +16,7 @@ server.register([require('inert'), require('vision'), require('hapi-auth-cookie'
     throw err;
   }
 
-  /*//registering disinfect module
+  //registering disinfect module
   server.register({
     register: require('disinfect'),
     options: {
@@ -28,7 +28,7 @@ server.register([require('inert'), require('vision'), require('hapi-auth-cookie'
     if (err) {
       throw err;
     }
-  });*/
+  });
 
   server.views({
     engines: {
