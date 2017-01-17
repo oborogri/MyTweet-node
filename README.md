@@ -7,7 +7,7 @@ A microblog/twitter like application, built and developed using Hapi.js and Hadl
 Author and owner: Grigore Oboroceanu
 ## Installation
 Download or clone project in GitHUb and import to suitable IDE.
-Create new user account for testing the app. Admin user may login with email: admin@wit.ie and password: secret 
+Create new user account for testing the app. Admin user may login with email: 'admin@wit.ie' and password: 'adminkey' 
 ##Source tree
 The repo source tree comprises two main branches: master and dev, and several branches for each of the app main features. 
 The final changes are merged into dev and master and tagged as releases V-01 to v-06
