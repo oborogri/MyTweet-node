@@ -30,6 +30,6 @@ The application provides a public API which provides access to endpoints after a
 
 ## Deployment
 The application web server is deployed on Heroku and to AWS Linux AMI and the database is hosted on a separate MongoDB instance on AWS.<br>  
-The app on Amazon:              http:// 35.167.99.174:4000 <br>
+The app on Amazon:              http:// 52.11.78.175:4000 <br>
 The app on Heroku:              https://my-tweet20073381.herokuapp.com/ <br>
 The app on ghpages:             https://oborogri.github.io/mytweet-aurelia-ghpages/
